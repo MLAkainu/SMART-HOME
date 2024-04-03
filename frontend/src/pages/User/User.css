@@ -1,0 +1,41 @@
+.user-wrapper {
+    width: 96%;
+    height: 90%;
+    margin: 0 auto; 
+    margin-top: 10px;
+    background-color: rgb(253, 253, 253);
+    border-radius: 15px;
+    display: grid;
+    grid-template-areas:
+    "item1 item2 item2 item2"
+    "item1 item2 item2 item2"
+    "item1 item3 item3 item3"
+    ;
+}
+.user-field1, .user-filed1 form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+.avatar-wrapper {
+    margin-bottom: 10px;
+}
+.avatar {
+    margin-bottom: 10px;
+}
+.user-field2 form, .user-field3 form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 96%
+}
+.user-field1 {
+    grid-area: item1;
+}
+.user-field2 {
+    grid-area: item2;
+}
+.user-field3 {
+    grid-area: item3;
+}
