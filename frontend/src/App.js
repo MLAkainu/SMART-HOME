@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import DefaultLayout from './components/layouts/DefaultLayout';
 import Dashboard from './pages/Dashboard';
+import Light from './pages/Light';
 
 import { useSelector } from "react-redux"
 
@@ -14,6 +15,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route element={<DefaultLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/light" element={<Light />} />
+
         </Route>
         
       </Routes>

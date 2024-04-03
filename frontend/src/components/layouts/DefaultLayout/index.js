@@ -23,7 +23,7 @@ import { useSelector } from "react-redux"
 function DefaultLayout() {
     const user = {
         firstname: "Lokkk",
-        lastname: "Van A",
+        lastname: "Nguyen Minh",
         avatar: avt
     }
     const navigate = useNavigate();
@@ -38,10 +38,20 @@ function DefaultLayout() {
     var hour = date.getHours();
     var day = "", num = date.getDay();
     var weather;
+    var title = "";
 
-    if (hour >= 6 && hour <= 12) weather = sun;
-    else if (hour > 12 && hour < 18) weather = cloudy;
-    else weather = night;
+    if (hour >= 6 && hour <= 12) {
+        weather = sun;
+        title = "Good morning,";
+    }
+    else if (hour > 12 && hour < 18) {
+        weather = cloudy;
+        title = "Good afternoon,";
+    }
+    else {
+        weather = night;
+        title = "Good evening,";
+    }
 
     switch (num) {
         case 0:
@@ -171,7 +181,7 @@ function DefaultLayout() {
                     <div className="header__time">
                       <div className="header__time-greeting">
                         {/* <span className="greeting1">Good morning, {user.data.firstname}</span> */}
-                        <span className="greeting1">Good morning, {user.firstname}</span>
+                        <span className="greeting1"> {title} {user.firstname}</span>
                         <span className="greeting2">Have a nice day</span>
                       </div>
                       <div className="header__time-weather">
