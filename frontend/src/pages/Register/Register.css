@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+.register{
+    margin: 0;
+    padding: 0;
+    font-family: 'poppins',sans-serif;
+}
+.register section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background: url('../../assets/Login.jpg')no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.register .form-box{
+    position: relative;
+    width: 40%;
+    height: 90%;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.register .form-value {
+    width: 90%;
+    padding-right: 20px;
+}
+.register .form-value h2{
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+    margin-top: 10px;
+}
+.register .inputbox{
+    position: relative;
+    margin: 30px;
+    width: 100%;    
+    border-bottom: 2px solid #fff;
+}
+.register .inputbox label{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 1em;
+    pointer-events: none;
+    transition: .5s;
+}
+.register input:focus ~ label,
+.register input:valid ~ label{
+top: -5px;
+}
+.register .inputbox input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    padding:0 35px 0 5px;
+    color: #fff;
+}
+.sign-up{
+    width: 30%;
+    height: 40px;
+    margin-left: 20px;
+    border-radius: 40px;
+    background: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    
+}
+.box-name {
+    display: flex;
+    flex-direction: row;
+}
+.register-btn-wrap {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+.register-link{
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+.register-link:hover{
+    text-decoration: underline;
+}
