@@ -1,0 +1,28 @@
+:root {
+    /* size */
+    --height-header: 100px;
+    --height-navbar1:50px;
+    --height-footer:300px;
+    /* dashboard*/
+    --width-dashboard: 1200px;
+    --height-dashboard:600px;
+    --height-header:150px;
+    /* color */
+    --primary1-color: #09153e;
+    --primary2-color: #1babfc;
+    --primary3-color: #b9bccc;
+    --primary4-color: #394374;
+    --primary5-color:#101c42;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html {
+    font-size: 62.5%;
+}
+body {
+    font-size: 1.6rem;
+}
+
