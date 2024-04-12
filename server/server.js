@@ -1,9 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 import * as dotenv from "dotenv";
+import router, { initializeFirebaseApp } from "./firebase.js";
 dotenv.config({ path: "../.env" });
-import mongoose from "mongoose";
-
 const app = express();
 
 app.use(express.json());
@@ -13,18 +12,20 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+initializeFirebaseApp();
 // api here
+
+app.use('/api', router);
 
 // not found
 app.use("*", (req, res) => {
-  res.status(404).json({ message: "not found" });
+  res.json({ msg: "not found" });
 });
 
 // port
 const port = process.env.PORT || 5001;
 
 try {
-  await mongoose.connect(process.env.MONGO_URL);
 
   app.listen(5001, () => {
     console.log(`server listening on port ${port}`);
