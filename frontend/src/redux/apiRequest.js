@@ -9,18 +9,19 @@ import {
     changePassStart, changePassSuccess, changePassFailed
 } from "./authSlice"
 
-export const login = async (user, dispatch, navigate) => {
+export const login = async (user, dispatch, navigate,setToken) => {
     dispatch(loginStart())
     try {
-        const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/user/login`, user, {
-            withCredentials: true
-        });
+        const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/user/login`, user);
         dispatch(loginSuccess(res.data))
+        setToken(res.data)
+        localStorage.setItem('token',res.data)
         navigate("/dashboard")
     }
     catch (err) {
         dispatch(loginFailed())
         alert("Login failed")
+        console.log(err)
     }
 }
 export const register = async (user, dispatch, navigate) => {
