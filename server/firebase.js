@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase-admin/app";
 import {
   getFirestore,
   doc,
@@ -14,6 +14,7 @@ import {
   deleteDoc,
   updateDoc,
 } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Router } from "express";
 import { firebaseConfig } from "./config.js";
 const router = Router();
@@ -26,11 +27,13 @@ const router = Router();
 // Initialize Firebase
 let app;
 let db;
+let auth;
 
 export const initializeFirebaseApp = () => {
   try {
     app = initializeApp(firebaseConfig);
     db = getFirestore(app);
+    auth = getAuth(app)
     return app;
   } catch (err) {
     console.log(err);
@@ -57,20 +60,22 @@ const createUser = async (req, res) => {
   }
 };
 
-const getUserByUserName = async (req, res) => {
+const getUser = async (req, res) => {
   try {
     const userRef = collection(db, "Users");
-    const q = query(userRef, where("userName", "==", req.params.userName));
+    const q = query(userRef, where("userName", "==", req.body.userName));
     let user;
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       user = doc.data();
     });
     if (user) {
+      if (user.password != req.body.password)
+        return res.status(401).json({msg:'wrong password'})
       delete user.password;
       res.status(200).json(user);
     } else {
-      res.status(404).json({ msg: "user not found" });
+      res.status(404).json({ msg: "user not found" })
     }
   } catch (err) {
     console.log(err);
@@ -247,8 +252,9 @@ const getActivities = async (req, res) => {
   }
 }
 
-router.route("/users").post(createUser);
-router.route("/:userName").get(getUserByUserName).put(updateUser).delete(deleteUser);
+router.route("/user/new").post(createUser);
+router.route("/user/login").post(getUser);
+router.route('/user').put(updateUser).delete(deleteUser);
 router.route("/:userName/notifs").post(createNotif).get(getNotifs);
 router.route('/:userName/activities').get(getActivities).post(createActivity);
 

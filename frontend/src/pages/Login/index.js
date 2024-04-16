@@ -2,6 +2,7 @@ import './Login.css'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { login } from '../../redux/apiRequest';
 // import { login } from '../../redux/apiRequest';
 
 
@@ -18,7 +19,9 @@ function Login() {
         //     password: password
         // }
         // login(newUser, dispatch, navigate);
-        navigate('/dashboard');
+        const user={userName:username,password}
+        login(user, dispatch, navigate);
+        //avigate('/dashboard');
     };
     return (
         <div className='login'>

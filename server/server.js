@@ -1,9 +1,11 @@
 import express from "express";
 import morgan from "morgan";
+import cors from 'cors'
 import * as dotenv from "dotenv";
 import router, { initializeFirebaseApp } from "./firebase.js";
 dotenv.config({ path: "../.env" });
 const app = express();
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +29,7 @@ const port = process.env.PORT || 5001;
 
 try {
 
-  app.listen(5001, () => {
+  app.listen(port, () => {
     console.log(`server listening on port ${port}`);
   });
 } catch (error) {

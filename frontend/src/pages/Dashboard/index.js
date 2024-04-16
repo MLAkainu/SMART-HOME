@@ -9,6 +9,7 @@ import smoke from "../../assets/smoke.jpg";
 import { FaFan } from "react-icons/fa";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa";
+
 import { updatetemperhumid, putmessage,updateai } from '../../redux/apiRequest';
 
 import "./Dashboard.css";

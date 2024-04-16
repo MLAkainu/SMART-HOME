@@ -39,10 +39,10 @@ function Register() {
 
 
         const newUser = {
-            firstname: firstname,
-            lastname: lastname,
-            phonenumber: phonenumber,
-            username: username,
+            fName: firstname,
+            lName: lastname,
+            phoneNo: phonenumber,
+            userName: username,
             password: password
         }
         register(newUser, dispatch, navigate);
