@@ -37,15 +37,28 @@ function Register() {
         //     navigate('/register')
         // }
 
+        try {
+            const newUser = {
+                fname: fname,
+                lname: lname,
+                phoneNo: phoneNo,
+                email: email,
+                password: password
+            }
+            let response = await register(newUser, dispatch, navigate);
+            console.log(response.data); // chuỗi token trả về từ server
+            alert('Đăng ký tài khoản thành công');
+            navigate('/');
 
-        const newUser = {
-            fname,
-            lname,
-            phoneNo,
-            email,
-            password
         }
-        register(newUser, dispatch, navigate);
+        catch (error) {
+            console.error(error);
+            alert('Đăng ký tài khoản thất bại');
+            navigate('/register')
+        }
+
+
+
     };
     return (
         <div className='register'>
