@@ -38,9 +38,10 @@ export const register = async (user, dispatch, navigate) => {
 export const logout = async (dispatch, navigate) => {
     dispatch(logoutStart())
     try {
-        await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/user/logout`, {
-            withCredentials: true
-        })
+        // await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/user/logout`, {
+        //     withCredentials: true
+        // })
+        localStorage.setItem('token','')
         dispatch(logoutSuccess())
         navigate('/')
     } catch (err) {

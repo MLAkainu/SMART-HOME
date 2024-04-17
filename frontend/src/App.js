@@ -18,7 +18,12 @@ import axios from 'axios';
 function App() {
   const [token, setToken] = useState('');
   const [isAuth, setIsAuth] = useState(false);
-  console.log(isAuth)
+  const [user, setUser] = useState()
+  
+  const setTokenToNull = () => {
+  setToken('')
+  }
+
 
   useEffect(() => {
     const auth = async () => {
@@ -27,35 +32,38 @@ function App() {
         setIsAuth(false);
         return
       }
+      console.log(token)
       const res = await axios.post(
       `${process.env.REACT_APP_API_ENDPOINT}/api/user/verify`,
         { token });
-      console.log(res.data)
+      console.log(res.data);
+      setUser(res.data);
       if (res.data.msg === 'false') {
         setIsAuth(false);
       }
       else setIsAuth(true)
     }
-    auth()
-  },[])
-  
+    auth();
+  },[token])
 
-  return (
+  return isAuth ? (
     <Router>
       <Routes>
-        <Route path="/" element={isAuth ? <DefaultLayout /> : <Login setToken={setToken}/>}  />
-        {/* <Route path="/" element={<Login />} actions={ {setIsAuth}} /> */}
-        <Route path="/register" element={isAuth?<DefaultLayout/>:<Register />} />
-        <Route element={<DefaultLayout />}>
-
+        <Route element={<DefaultLayout setToken={setTokenToNull} />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/light" element={<Light />} />
           <Route path="/temperhumi" element={<TemperHumi />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/user" element={<User />} />
-
         </Route>
-        
+      </Routes>
+    </Router>
+  ) : (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login setToken={setToken} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Login setToken={setToken} />} />
       </Routes>
     </Router>
   );
