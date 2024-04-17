@@ -57,6 +57,7 @@ const createUser = async (req, res) => {
       lname: req.body.lname,
       fname: req.body.fname,
       phoneNo: req.body.phoneNo,
+      password:req.body.password,
       avatar: null,
     });
     res.status(200).send({ message: "user created" });
@@ -70,8 +71,15 @@ const loginUser = async (req, res) => {
   try {
     const userRecord = await getAuth().getUserByEmail(req.body.email);
     const uid = userRecord.uid;
-    console.log(`Successfully fetched user data`);
-    res.status(200).json(uid);
+    const docRef = doc(db, "Users", uid);
+    const docSnap = await getDoc(docRef);
+    if (req.body.password === docSnap.data().password) {
+      console.log(`Successfully fetched user data`);
+    res.status(200).json(userRecord.passwordHash);
+    }
+    else {
+      res.status(400).json({message:'wrong email or password'})
+    }
   } catch (error) {
     console.log("Error fetching user data:", error);
     res.status(404).json({ message: "No user found" });
