@@ -8,24 +8,62 @@ import TemperHumi from './pages/TemperHumid';
 import Notification from './pages/Notification';
 import User from './pages/User';
 
+
+
 import { useSelector } from "react-redux"
+import {  useEffect, useState } from 'react';
+import axios from 'axios';
+
 
 function App() {
-  return (
+  const [token, setToken] = useState('');
+  const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState()
+  
+  const setTokenToNull = () => {
+  setToken('')
+  }
+
+
+  useEffect(() => {
+    const auth = async () => {
+      setToken(localStorage.getItem('token'))
+      if (token === null || token === '') {
+        setIsAuth(false);
+        return
+      }
+      console.log(token)
+      const res = await axios.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/api/user/verify`,
+        { token });
+      console.log(res.data);
+      setUser(res.data);
+      if (res.data.msg === 'false') {
+        setIsAuth(false);
+      }
+      else setIsAuth(true)
+    }
+    auth();
+  },[token])
+
+  return isAuth ? (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route element={<DefaultLayout />}>
-
+        <Route element={<DefaultLayout setToken={setTokenToNull} />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/light" element={<Light />} />
           <Route path="/temperhumi" element={<TemperHumi />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/user" element={<User />} />
-
         </Route>
-        
+      </Routes>
+    </Router>
+  ) : (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login setToken={setToken} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Login setToken={setToken} />} />
       </Routes>
     </Router>
   );

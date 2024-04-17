@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux"
 
-function DefaultLayout() {
+function DefaultLayout(props) {
     const user = {
         firstname: "Lokkk",
         lastname: "Nguyen Minh",
@@ -118,11 +118,13 @@ function DefaultLayout() {
     }
 
     function handlelogout() {
-        // dispatch(logout())
-        // if (window.confirm('Bạn có muốn đăng xuất không ?')) {
-        //     logout(dispatch, navigate)
-        //   }
-        navigate("/")
+      //  dispatch(logout())
+      //   if (window.confirm('Bạn có muốn đăng xuất không ?')) {
+      //       logout(dispatch, navigate)
+      //     }
+      props.setToken()
+      localStorage.setItem("token", "");
+      navigate("/");
     }
     return (
         <div className="App">

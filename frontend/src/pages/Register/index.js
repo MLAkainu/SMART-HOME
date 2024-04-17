@@ -6,10 +6,10 @@ import { register } from '../../redux/apiRequest';
 import { useDispatch } from 'react-redux';
 
 function Register() {
-    const [firstname, setFirstname] = useState('')
-    const [lastname, setLastname] = useState('')
-    const [phonenumber, setPhonenumber] = useState('')
-    const [username, setUsername] = useState('')
+    const [fname, setFname] = useState('')
+    const [lname, setLname] = useState('')
+    const [phoneNo, setPhoneNo] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch();
@@ -37,15 +37,28 @@ function Register() {
         //     navigate('/register')
         // }
 
+        try {
+            const newUser = {
+                fname: fname,
+                lname: lname,
+                phoneNo: phoneNo,
+                email: email,
+                password: password
+            }
+            let response = await register(newUser, dispatch, navigate);
+            console.log(response.data); // chuỗi token trả về từ server
+            alert('Đăng ký tài khoản thành công');
+            navigate('/');
 
-        const newUser = {
-            fName: firstname,
-            lName: lastname,
-            phoneNo: phonenumber,
-            userName: username,
-            password: password
         }
-        register(newUser, dispatch, navigate);
+        catch (error) {
+            console.error(error);
+            alert('Đăng ký tài khoản thất bại');
+            navigate('/register')
+        }
+
+
+
     };
     return (
         <div className='register'>
@@ -56,20 +69,20 @@ function Register() {
                             <h2>Sign up</h2>
                             <div className="box-name">
                                 <div className="inputbox">
-                                    <input type="text" onChange={(event) => setFirstname(event.target.value)} />
+                                    <input type="text" onChange={(event) => setFname(event.target.value)} />
                                     <label >First Name</label>
                                 </div>
                                 <div className="inputbox">
-                                    <input type="text" onChange={(event) => setLastname(event.target.value)} />
+                                    <input type="text" onChange={(event) => setLname(event.target.value)} />
                                     <label >Lastname</label>
                                 </div>
                             </div>
                             <div className="inputbox">
-                                <input type="text" onChange={(event) => setPhonenumber(event.target.value)} />
+                                <input type="text" onChange={(event) => setPhoneNo(event.target.value)} />
                                 <label>Phonenumber</label>
                             </div>
                             <div className="inputbox">
-                                <input type="text" onChange={(event) => setUsername(event.target.value)} />
+                                <input type="text" onChange={(event) => setEmail(event.target.value)} />
                                 <label>Username</label>
                             </div>
                             <div className="inputbox">

@@ -6,11 +6,12 @@ import { login } from '../../redux/apiRequest';
 // import { login } from '../../redux/apiRequest';
 
 
-function Login() {
-    const [username, setUsername] = useState('');
+function Login({setToken}) {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         // dispatch(login({ username, password }));
@@ -19,8 +20,8 @@ function Login() {
         //     password: password
         // }
         // login(newUser, dispatch, navigate);
-        const user={userName:username,password}
-        login(user, dispatch, navigate);
+        const user = { email, password }
+        login(user, dispatch, navigate,setToken);
         //avigate('/dashboard');
     };
     return (
@@ -31,7 +32,7 @@ function Login() {
                         <form onSubmit={handleSubmit}>
                                 <h2>Login</h2>
                                 <div className="inputbox">
-                                    <input type="text" onChange={(e) => setUsername(e.target.value)} />
+                                    <input type="text" onChange={(e) => setEmail(e.target.value)} />
                                     <label>Email</label>
                                 </div>
                                 <div className="inputbox">
