@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
     const docSnap = await getDoc(docRef);
     if (req.body.password === docSnap.data().password) {
       console.log(`Successfully fetched user data`);
-    res.status(200).json(userRecord.passwordHash);
+    res.status(200).json(uid);
     }
     else {
       res.status(400).json({message:'wrong email or password'})
