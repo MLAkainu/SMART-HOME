@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import DefaultLayout from './components/layouts/DefaultLayout';
@@ -36,12 +36,13 @@ function App() {
       const res = await axios.post(
       `${process.env.REACT_APP_API_ENDPOINT}/api/user/verify`,
         { token });
-      console.log(res.data);
-      setUser(res.data);
       if (res.data.msg === 'false') {
         setIsAuth(false);
       }
-      else setIsAuth(true)
+      else {
+        setIsAuth(true)
+        setUser(res.data)
+      }
     }
     auth();
   },[token])
@@ -56,6 +57,7 @@ function App() {
           <Route path="/notification" element={<Notification />} />
           <Route path="/user" element={<User />} />
         </Route>
+        <Route path='*' element={ <Navigate to='/dashboard'/>} />
       </Routes>
     </Router>
   ) : (
@@ -63,7 +65,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login setToken={setToken} />} />
         <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Login setToken={setToken} />} />
+        <Route path="*" element={<Navigate to='/'/>} />
       </Routes>
     </Router>
   );
