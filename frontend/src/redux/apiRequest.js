@@ -24,10 +24,12 @@ export const login = async (user, dispatch, navigate,setToken) => {
         console.log(err)
     }
 }
-export const register = async (user, dispatch, navigate) => {
+export const register = async (user, dispatch, navigate,setToken) => {
     dispatch(registerStart())
     try {
         const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/user/new`, user)
+        setToken(res.data);
+        localStorage.setItem("token", res.data);
         dispatch(registerSuccess())
         return res
     }

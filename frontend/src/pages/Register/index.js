@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { register } from '../../redux/apiRequest';
 import { useDispatch } from 'react-redux';
 
-function Register() {
+function Register({setToken}) {
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
     const [phoneNo, setPhoneNo] = useState('')
@@ -45,7 +45,7 @@ function Register() {
                 email: email,
                 password: password
             }
-            let response = await register(newUser, dispatch, navigate);
+            let response = await register(newUser, dispatch, navigate,setToken);
             console.log(response.data); // chuỗi token trả về từ server
             alert('Đăng ký tài khoản thành công');
             navigate('/');

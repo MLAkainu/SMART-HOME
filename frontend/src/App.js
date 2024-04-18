@@ -64,7 +64,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login setToken={setToken} />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register setToken={setToken}/>} />
         <Route path="*" element={<Navigate to='/'/>} />
       </Routes>
     </Router>

@@ -52,6 +52,7 @@ const createUser = async (req, res) => {
       password: req.body.password,
       disabled: false,
     });
+    const uid=userRecord.uid
     console.log("Successfully created new user:", userRecord.uid);
     await setDoc(doc(db, "Users", userRecord.uid), {
       lname: req.body.lname,
@@ -60,7 +61,7 @@ const createUser = async (req, res) => {
       password:req.body.password,
       avatar: null,
     });
-    res.status(200).send({ message: "user created" });
+    res.status(200).send(uid);
   } catch (error) {
     console.log("Error creating new user:", error);
     res.status(400).json(error.message);
