@@ -47,16 +47,9 @@ function Dashboard() {
 
     
     // const user = useSelector((state) => state.auth_.login?.currentUser);
-    const user = {
-        id: 1,
-        username: "admin",
-        email: "admin@gmail.com",
-        password: "admin",
-        firstname: "admin",
-        lastname: "admin",
-        avatar: "../../assets/avatar.jpg",
+    
+    const [user, setUser] = useState();
 
-    }
 
     // công tắc đèn led 
     const [ledBtn, setLed] = useState(0);
@@ -107,7 +100,7 @@ function Dashboard() {
         else {
             message.content = "Đóng cửa";
         }
-        await putmessage(message, user.id)
+        await putmessage(message, user.data.id)
         setDoor(!doorBtn);
     }
 
@@ -121,7 +114,7 @@ function Dashboard() {
                 content: "Nhiệt độ vượt quá ngưỡng cho phép!",
                 type: "3",
             }
-            await putmessage(message, user.id)
+            await putmessage(message, user.data.id)
         }
     }
 
@@ -133,7 +126,7 @@ function Dashboard() {
                 content: "Độ ẩm vượt quá ngưỡng cho phép!",
                 type: "3",
             }
-            await putmessage(message, user.id)
+            await putmessage(message, user.data.id)
         }
     }
 

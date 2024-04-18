@@ -19,13 +19,16 @@ import { logout } from "../../../redux/apiRequest.js"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux"
+import { useEffect } from 'react';
+import axios from 'axios';
+
+
 
 function DefaultLayout(props) {
-    const user = {
-        firstname: "Lokkk",
-        lastname: "Nguyen Minh",
-        avatar: avt
-    }
+
+    console.log(props.user)
+    
+  
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [btnSider, setBtnSider] = useState(0);
@@ -39,6 +42,7 @@ function DefaultLayout(props) {
     var day = "", num = date.getDay();
     var weather;
     var title = "";
+    var avatar = avt;
 
     if (hour >= 6 && hour <= 12) {
         weather = sun;
@@ -176,14 +180,16 @@ function DefaultLayout(props) {
                       <div className="navbar__account">
                         <Link to="/user">
                           {/* <img className="navbar__account-img" src={user.data.avatar=="None"?avt:user.data.avatar} /> */}
-                            <img className="navbar__account-img" src={user.avatar} />
+                          
+                            <img className="navbar__account-img" src={props.user.avatar==null?avt:props.user.avatar
+                            } />
                         </Link>
                       </div>
                     </nav>
                     <div className="header__time">
                       <div className="header__time-greeting">
                         {/* <span className="greeting1">Good morning, {user.data.firstname}</span> */}
-                        <span className="greeting1"> {title} {user.firstname}</span>
+                        <span className="greeting1"> {title} {props.user.fname} </span>
                         <span className="greeting2">Have a nice day</span>
                       </div>
                       <div className="header__time-weather">

@@ -47,10 +47,11 @@ function App() {
     auth();
   },[token])
 
+
   return isAuth ? (
     <Router>
       <Routes>
-        <Route element={<DefaultLayout setToken={setTokenToNull} />}>
+        <Route element={<DefaultLayout setToken={setTokenToNull} user={user}  />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/light" element={<Light />} />
           <Route path="/temperhumi" element={<TemperHumi />} />
