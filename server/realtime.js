@@ -11,9 +11,9 @@ const app = initializeApp(firebaseConfig);
 // Initialize Realtime Database and get a reference to the service
 
 
-export const writeUserData = (userName, Fname,Lname,phoneNo, email, password) => {
+export const writeUserData = (uid, Fname,Lname,phoneNo, email, password) => {
   const db = getDatabase();
-  const reference = ref(db, "users/" + userName);
+  const reference = ref(db, "users/" + uid);
   set(reference, {
     Fname: Fname,
     Lname: Lname,
@@ -25,17 +25,17 @@ export const writeUserData = (userName, Fname,Lname,phoneNo, email, password) =>
 
 // replace val for each type
 
-export const writeTemp = (userName, val) => {
+export const writeTemp = (uid, val) => {
   const db = getDatabase();
-  const reference = ref(db, 'users/' + userName, '/temp');
+  const reference = ref(db, 'users/' + uid, '/temp');
     set(reference, {
       val:val
     })
 }
 
-export const readTemp = (userName) => {
+export const readTemp = (uid) => {
   const db = getDatabase();
-  const temp = ref(db, 'users/' + userName + '/temp');
+  const temp = ref(db, 'users/' + uid + '/temp');
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     updateTemp(postElement,data)
@@ -43,34 +43,34 @@ export const readTemp = (userName) => {
   )
 }
 
-export const writeHumid = (userName, val) => {
+export const writeHumid = (uid, val) => {
   const db = getDatabase();
-  const reference = ref(db, "users/" + userName, "/humid");
+  const reference = ref(db, "users/" + uid, "/humid");
   set(reference, {
     val: val,
   });
 };
 
-export const readHumid = (userName) => {
+export const readHumid = (uid) => {
   const db = getDatabase();
-  const temp = ref(db, "users/" + userName + "/humid");
+  const temp = ref(db, "users/" + uid + "/humid");
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     updateHumid(postElement, data);
   });
 };
 
-export const writeLight = (userName, val) => {
+export const writeLight = (uid, val) => {
   const db = getDatabase();
-  const reference = ref(db, "users/" + userName, "/light");
+  const reference = ref(db, "users/" + uid, "/light");
   set(reference, {
     val: val,
   });
 };
 
-export const readLight = (userName) => {
+export const readLight = (uid) => {
   const db = getDatabase();
-  const temp = ref(db, "users/" + userName + "/light");
+  const temp = ref(db, "users/" + uid + "/light");
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     updateLight(postElement, data);
