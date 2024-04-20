@@ -47,38 +47,48 @@ export const readTemp = (req,res) => {
   )
 }
 
-export const writeHumid = (uid, val) => {
+export const writeHumid = (req, res) => {
   const db = getDatabase();
-  const reference = ref(db, `users/${uid}/humid`);
+  const uid = req.body.uid;
+  const val = req.body.val; 
+  const reference = ref(db, `${uid}/humid`);
   set(reference, {
-    val: val,
-  });
-};
+    val
+  })
+  res.status(200).json({message:'data recorded'})
+}
 
-export const readHumid = (uid) => {
+export const readHumid = (req, res) => {
   const db = getDatabase();
-  const temp = ref(db, `users/${uid}/humid`);
+  const temp = ref(db, `${req.body.uid}/humid`)
+  console.log(temp)
   onValue(temp, (snapshot) => {
+    console.log(snapshot)
     const data = snapshot.val();
-    updateHumid(postElement, data);
-  });
-};
+    res.status(200).json(data)
+  })
+}
 
-export const writeLight = (uid, val) => {
+export const writeLight = (req, res) => {
   const db = getDatabase();
-  const reference = ref(db,`users/${uid}/light`);
+  const uid = req.body.uid;
+  const val = req.body.val;
+  const reference = ref(db,`${uid}/light`);
   set(reference, {
-    val: val,
-  });
+    val
+  })
+  res.status(200).json({message:'data recorded'})
 };
 
-export const readLight = (uid) => {
+export const readLight = (req, res) => {
   const db = getDatabase();
-  const temp = ref(db, `users/${uid}/light`);
+  const temp = ref(db, `${req.body.uid}/light`)
+  console.log(temp)
   onValue(temp, (snapshot) => {
+    console.log(snapshot)
     const data = snapshot.val();
-    updateLight(postElement, data);
-  });
+    res.status(200).json(data)
+  })
 };
 
 rtrouter.route('/realtime/temp/').get(readTemp).post(writeTemp)
