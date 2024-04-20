@@ -13,7 +13,7 @@ const app = initializeApp(firebaseConfig);
 
 export const writeUserData = (uid, Fname,Lname,phoneNo, email, password) => {
   const db = getDatabase();
-  const reference = ref(db, "users/" + uid);
+  const reference = ref(db, `users/${uid}`);
   set(reference, {
     Fname: Fname,
     Lname: Lname,
@@ -27,7 +27,7 @@ export const writeUserData = (uid, Fname,Lname,phoneNo, email, password) => {
 
 export const writeTemp = (uid, val) => {
   const db = getDatabase();
-  const reference = ref(db, 'users/' + uid, '/temp');
+  const reference = ref(db, `users/${uid}/temp`);
     set(reference, {
       val:val
     })
@@ -35,7 +35,7 @@ export const writeTemp = (uid, val) => {
 
 export const readTemp = (uid) => {
   const db = getDatabase();
-  const temp = ref(db, 'users/' + uid + '/temp');
+  const temp = ref(db, `users/${uid}/temp`);
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     updateTemp(postElement,data)
@@ -45,7 +45,7 @@ export const readTemp = (uid) => {
 
 export const writeHumid = (uid, val) => {
   const db = getDatabase();
-  const reference = ref(db, "users/" + uid, "/humid");
+  const reference = ref(db, `users/${uid}/humid`);
   set(reference, {
     val: val,
   });
@@ -53,7 +53,7 @@ export const writeHumid = (uid, val) => {
 
 export const readHumid = (uid) => {
   const db = getDatabase();
-  const temp = ref(db, "users/" + uid + "/humid");
+  const temp = ref(db, `users/${uid}/humid`);
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     updateHumid(postElement, data);
@@ -62,7 +62,7 @@ export const readHumid = (uid) => {
 
 export const writeLight = (uid, val) => {
   const db = getDatabase();
-  const reference = ref(db, "users/" + uid, "/light");
+  const reference = ref(db,`users/${uid}/light`);
   set(reference, {
     val: val,
   });
@@ -70,7 +70,7 @@ export const writeLight = (uid, val) => {
 
 export const readLight = (uid) => {
   const db = getDatabase();
-  const temp = ref(db, "users/" + uid + "/light");
+  const temp = ref(db, `users/${uid}/light`);
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     updateLight(postElement, data);

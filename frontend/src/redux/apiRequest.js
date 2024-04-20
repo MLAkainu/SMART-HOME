@@ -50,7 +50,7 @@ export const logout = async (dispatch, navigate) => {
         dispatch(logoutFailed())
     }
 }
-export const updatelight = async (dispatch, date) => {
+export const updatelight = async (uid, dispatch, date) => {
     dispatch(updatelightStart())
     try {
         let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=light&date=${date}`, {
@@ -76,7 +76,7 @@ export const updatelight = async (dispatch, date) => {
     }
 }
 
-export const updatetemperhumid = async (dispatch, date) => {
+export const updatetemperhumid = async (uid, dispatch, date) => {
     dispatch(updatetemperhumidStart())
     try {
         let temp = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=temp&date=${date}`, {
@@ -116,7 +116,7 @@ export const updatetemperhumid = async (dispatch, date) => {
         return result
     }
 }
-export const changeavatar = async (new_avatar, dispatch, id) => {
+export const changeavatar = async (uid, new_avatar, dispatch, id) => {
     dispatch(changeAvatarStart())
     try {
         const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/changeAvatar?id=${id}`, new_avatar, {
@@ -129,7 +129,7 @@ export const changeavatar = async (new_avatar, dispatch, id) => {
         alert("Change Avatar failed")
     }
 }
-export const changeinfor = async (new_infor, dispatch, id) => {
+export const changeinfor = async (uid, new_infor, dispatch, id) => {
     dispatch(changeInforStart())
     try {
         const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/update/info?id=${id}`, new_infor, {
@@ -143,7 +143,7 @@ export const changeinfor = async (new_infor, dispatch, id) => {
         alert("Change User's Information Failed")
     }
 }
-export const changepass = async (changepass, dispatch, id) => {
+export const changepass = async (uid, changepass, dispatch, id) => {
     dispatch(changePassStart())
     try {
         const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/update/pass?id=${id}`, changepass, {
@@ -157,7 +157,7 @@ export const changepass = async (changepass, dispatch, id) => {
         alert("Change Password Failed")
     }
 }
-export const putmessage = async (message, id) => {
+export const putmessage = async (uid, message, id) => {
     try {
         await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/noty/push?id=${id}`, message, {
             withCredentials: true
@@ -166,7 +166,7 @@ export const putmessage = async (message, id) => {
         console.log(err)
     }
 }
-export const getmessage = async (id) => {
+export const getmessage = async (uid, id) => {
     try {
         const data = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/noty/get?id=${id}`, {
             withCredentials: true
@@ -177,7 +177,7 @@ export const getmessage = async (id) => {
     }
 }
 
-export const getlight = async (date) => {
+export const getlight = async (uid, date) => {
     try {
         let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=light&date=${date}`, {
             responseType: 'json',
@@ -190,7 +190,7 @@ export const getlight = async (date) => {
         return []
     }
 }
-export const gettemper = async (date) => {
+export const gettemper = async (uid, date) => {
     try {
         let temper = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=temp&date=${date}`, {
             responseType: 'json',
@@ -203,7 +203,7 @@ export const gettemper = async (date) => {
         return []
     }
 }
-export const gethumid = async (date) => {
+export const gethumid = async (uid, date) => {
     try {
         let humid = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=humid&date=${date}`, {
             responseType: 'json',
