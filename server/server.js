@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from 'cors'
 import * as dotenv from "dotenv";
 import router, { initializeFirebaseApp } from "./firebase.js";
+import rtrouter from './realtime.js';
 dotenv.config({ path: "../.env" });
 const app = express();
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
@@ -18,6 +19,7 @@ initializeFirebaseApp();
 // api here
 
 app.use('/api', router);
+app.use('/api',rtrouter)
 
 // not found
 app.use("*", (req, res) => {
