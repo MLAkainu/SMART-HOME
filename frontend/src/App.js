@@ -56,7 +56,7 @@ function App() {
           <Route path="/light" element={<Light />} />
           <Route path="/temperhumi" element={<TemperHumi />} />
           <Route path="/notification" element={<Notification />} />
-          <Route path="/user" element={<User />} />
+          <Route path="/user" element={<User user={user}/>} />
         </Route>
         <Route path='*' element={ <Navigate to='/dashboard'/>} />
       </Routes>

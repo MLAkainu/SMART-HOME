@@ -6,8 +6,9 @@ import { useSelector } from "react-redux"
 import { TextField, Button, Avatar, Input } from '@mui/material';
 import { changeavatar, changeinfor, changepass } from '../../redux/apiRequest';
 
-function User() {
+function User(props) {
 
+    console.log(props);
     const user = {
         data: {
             id: 1,
@@ -20,10 +21,10 @@ function User() {
             avatar: "../../../assets/avatar.jpg"
         }
     }
-    const [firstname, setFirstname] = useState(user.data.firstname);
-    const [lastname, setLastname] = useState(user.data.lastname);
+    const [firstname, setFirstname] = useState(props.user.fname);
+    const [lastname, setLastname] = useState(props.user.lname);
     const [email, setEmail] = useState(user.data.email);
-    const [phonenumber, setPhonenumber] = useState(user.data.phone);
+    const [phonenumber, setPhonenumber] = useState(props.user.phoneNo);
     const [oldpassword, setOldpassword] = useState('');
     const [newpassword, setNewpassword] = useState('');
     const [avatar, setAvatar] = useState(user.data.avatar);
