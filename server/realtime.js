@@ -161,8 +161,11 @@ export const readLux = (req, res) => {
 }
 
 rtrouter.route("/equip/light").get(readLight).post(writeLight)
+rtrouter.route("/equip/door").get(readDoor).post(writeDoor)
+rtrouter.route("/equip/fan").get(readFan).post(writeFan)
+
 rtrouter.route("/data/stat/humid").get(readHumid).post(writeHumid);
 rtrouter.route("/data/stat/temp").get(readTemp).post(writeTemp);
-// rtrouter.route("/data/stat/lux").get(readTemp).post(writeTemp);
+rtrouter.route("/data/stat/lux").get(readLux).post(writeLux);
 rtrouter.route('/noty/push')
 export default rtrouter;
