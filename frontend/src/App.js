@@ -52,7 +52,7 @@ function App() {
     <Router>
       <Routes>
         <Route element={<DefaultLayout setToken={setTokenToNull} user={user}  />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard user={user} />} />
           <Route path="/light" element={<Light />} />
           <Route path="/temperhumi" element={<TemperHumi />} />
           <Route path="/notification" element={<Notification />} />

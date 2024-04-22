@@ -41,14 +41,14 @@ import 'react-toastify/dist/ReactToastify.css';
 //     });
 // };
 
-function Dashboard() {
+function Dashboard({user}) {
 
     const dispatch = useDispatch();
 
     
     // const user = useSelector((state) => state.auth_.login?.currentUser);
     
-    const [user, setUser] = useState();
+    // const [user, setUser] = useState();
 
 
     // công tắc đèn led 
@@ -65,7 +65,7 @@ function Dashboard() {
         else {
             message.content = "Tắt đèn";
         }
-        await putmessage(message, user.id)
+        await putmessage(message, user.uid)
         setLed(!ledBtn);
     }
 
@@ -144,7 +144,7 @@ function Dashboard() {
 
     //lay data
     const [tempers, setTemper] = useState([]);
-    const [humids, setHumid] = useState([]);
+    const [humid, setHumid] = useState([]);
     useEffect(() => {
         const intervalId = setInterval(async () => {
             try {
@@ -153,7 +153,7 @@ function Dashboard() {
                 let month = date.getMonth() + 1;
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
-                let latest = await updatetemperhumid(dispatch, temp);
+                let latest = await updatetemperhumid(user.uid, dispatch, temp);
                 setTemper(latest.temp);
                 setHumid(latest.humid);
                 await errorTemper(latest.temp);
@@ -351,7 +351,7 @@ function Dashboard() {
             <div className="dashBoard__right">
                 <div className="dashBoard__right-temper">
                     <h3 className="temper__infor">It's hot</h3>
-                    <h3 className="temper__text"> 27°C</h3>
+                    <h3 className="temper__text"> { tempers}°C</h3>
                     {/* <h3 className="temper__text"> {
 
                         tempers.length > 0 ? tempers : 0
@@ -360,7 +360,7 @@ function Dashboard() {
                 </div>
                 <div className="dashBoard__right-humi">
                     <h3 className="temper__infor1">High humidity</h3>
-                    <h3 className="temper__text1"> 40%</h3>
+                    <h3 className="temper__text1"> { humid}%</h3>
                     {/* <h3 className="temper__text"> {
                         humis.length > 0 ? humis : 0
                     }%</h3> */}

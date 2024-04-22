@@ -28,8 +28,9 @@ export const register = async (user, dispatch, navigate,setToken) => {
     dispatch(registerStart())
     try {
         const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/user/new`, user)
-        setToken(res.data);
-        localStorage.setItem("token", res.data);
+        // setToken(res.data);
+        // localStorage.setItem("token", res.data);
+        navigate("/");
         dispatch(registerSuccess())
         return res
     }
@@ -90,24 +91,25 @@ export const updatetemperhumid = async (uid, dispatch, date) => {
             withCredentials: true,
             uid
         })
-        const res = {
-            humid: humid.data.message.payload,
-            temp: temp.data.message.payload,
-        }
-        const result = {
-            temp: temp.data.message.latest.value,
-            humid: humid.data.message.latest.value
-        }
-        if (temp === undefined || temp.data.message.payload === undefined) {
-            res.temp = []
-            result.temp = 0
-        }
-        if (humid === undefined || humid.data.message.payload === undefined) {
-            res.humid = []
-            result.humid = 0
-        }
-        dispatch(updatetemperhumidSuccess(res))
-        return result
+        return {temp:temp.data,humid:humid.data}
+        // const res = {
+        //     humid: humid.data.message.payload,
+        //     temp: temp.data.message.payload,
+        // }
+        // const result = {
+        //     temp: temp.data.message.latest.value,
+        //     humid: humid.data.message.latest.value
+        // }
+        // if (temp === undefined || temp.data.message.payload === undefined) {
+        //     res.temp = []
+        //     result.temp = 0
+        // }
+        // if (humid === undefined || humid.data.message.payload === undefined) {
+        //     res.humid = []
+        //     result.humid = 0
+        // }
+        // dispatch(updatetemperhumidSuccess(res))
+        // return result
     }
     catch (err) {
         dispatch(updatetemperhumidFailed())
@@ -187,7 +189,7 @@ export const getlight = async (uid, date) => {
             withCredentials: true,
             uid
         })
-        return light.data.message.payload
+        return light.data
     }
     catch (err) {
         console.log(err)
@@ -201,7 +203,7 @@ export const gettemper = async (uid, date) => {
             withCredentials: true,
             uid
         })
-        return temper.data.message.payload
+        return temper.data
     }
     catch (err) {
         console.log(err)
@@ -212,10 +214,9 @@ export const gethumid = async (uid, date) => {
     try {
         let humid = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/humid`, {
             responseType: 'json',
-            withCredentials: true,
             uid
         })
-        return humid.data.message.payload
+        return humid.data
     }
     catch (err) {
         console.log(err)

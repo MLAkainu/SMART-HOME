@@ -83,7 +83,7 @@ function Register({setToken}) {
                             </div>
                             <div className="inputbox">
                                 <input type="text" onChange={(event) => setEmail(event.target.value)} />
-                                <label>Username</label>
+                                <label>Email</label>
                             </div>
                             <div className="inputbox">
                                 <input type="password" onChange={(event) => setPassword(event.target.value)} />

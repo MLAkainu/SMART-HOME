@@ -30,10 +30,11 @@ export const writeTemp = (req,res) => {
 
 export const readTemp = (req, res) => {
   const db = getDatabase();
-  const temp = ref(db, `${req.body.uid}/temp`)
-  console.log(temp)
+  // const temp = ref(db, `${req.body.uid}/temp`)
+  const temp = ref(db, `SYS-1/TEMP`)
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
+    console.log(data)
     res.status(200).json(data)
   }
   )
@@ -54,10 +55,11 @@ export const writeHumid = (req, res) => {
 
 export const readHumid = (req, res) => {
   const db = getDatabase();
-  const temp = ref(db, `${req.body.uid}/humid`)
-  console.log(temp)
+  // const temp = ref(db, `${req.body.uid}/humid`)
+  const temp = ref(db, `SYS-1/HUMIDITY`)
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
+    console.log(data)
     res.status(200).json(data)
   })
 }
@@ -77,8 +79,8 @@ export const writeLight = (req, res) => {
 
 export const readLight = (req, res) => {
   const db = getDatabase();
-  const temp = ref(db, `${req.body.uid}/light`)
-  console.log(temp)
+  // const temp = ref(db, `${req.body.uid}/light`)
+  const temp = ref(db, `YSY-1/LIGHT`)
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     res.status(200).json(data)
