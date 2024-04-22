@@ -19,6 +19,7 @@ import { initializeApp as dbInit } from "firebase/app";
 import { getAuth } from "firebase-admin/auth";
 import { Router } from "express";
 import { serviceAccount, firebaseConfig, dbUrl } from "./config.js";
+import bcrypt from "bcrypt";
 
 const router = Router();
 // TODO: Add SDKs for Firebase products that you want to use
@@ -29,6 +30,8 @@ const router = Router();
 // Initialize Firebase
 let app;
 let db;
+
+
 
 export const initializeFirebaseApp = () => {
   try {
@@ -58,7 +61,7 @@ const createUser = async (req, res) => {
       lname: req.body.lname,
       fname: req.body.fname,
       phoneNo: req.body.phoneNo,
-      password:req.body.password,
+      password: bcrypt.hashSync(req.body.password, 15),
       avatar: null,
     });
     res.status(200).send(uid);
@@ -73,8 +76,10 @@ const loginUser = async (req, res) => {
     const userRecord = await getAuth().getUserByEmail(req.body.email);
     const uid = userRecord.uid;
     const docRef = doc(db, "Users", uid);
-    const docSnap = await getDoc(docRef);
-    if (req.body.password === docSnap.data().password) {
+    const docSnap = await getDoc(docRef); 
+    const password = docSnap.data().password;
+    const hash = bcrypt.hashSync(req.body.password, 15);
+    if (bcrypt.compareSync(password, hash)) {
       console.log(`Successfully fetched user data`);
     res.status(200).json(uid);
     }
