@@ -128,6 +128,38 @@ export const readLight = (req, res) => {
   })
 };
 
+export const writeLux = (req,res) => {
+  const db = getDatabase();
+  // const uid = req.body.uid;
+  // const val = req.body.val;
+  // const date = req.body.date;
+  // const reference = ref(db, `${uid}/temp`);
+  //   set(reference, {
+  //     val
+  //   })
+  const reference = ref(db, 'SYS-1');
+    set(reference, {
+      'TEMP':req.body.val
+    })
+  res.status(200).json({ message: "data recorded" });
+}
+
+export const readLux = (req, res) => {
+  try{const db = getDatabase();
+  // const temp = ref(db, `${req.body.uid}/temp`)
+  const temp = ref(db, `SYS-1/TEMP`)
+  onValue(temp, (snapshot) => {
+    const data = snapshot.val();
+    console.log(data)
+    res.status(200).json(data).end()
+  },{onlyOnce:true}
+    )
+  }
+  catch (err) {
+    res.json({data:'error'})
+  }
+}
+
 rtrouter.route("/equip/light").get(readLight).post(writeLight)
 rtrouter.route("/data/stat/humid").get(readHumid).post(writeHumid);
 rtrouter.route("/data/stat/temp").get(readTemp).post(writeTemp);
