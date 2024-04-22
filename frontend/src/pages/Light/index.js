@@ -13,13 +13,16 @@ import "react-circular-progressbar/dist/styles.css";
 
 
 
-function Light() {
+function Light({user}) {
     const dispatch = useDispatch();
     //lay data tu api light
     // let getLights = useSelector(state => state.IoT.light);
     // const [lights, setLights] = useState(getlights);
+
+    
+
     const [lights, setLights] = useState([]);
-    const [light, setLight] = useState(0);
+    const [light, setLight] = useState();
     const [filter, setFilter] = useState(0);
     const [selecdate, setSelecdate] = useState(new Date());
     const showToastLight = () => {
@@ -34,6 +37,40 @@ function Light() {
             theme: "light",
         });
     };
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            try {
+                let date = new Date();
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
+                let temp = `${year}${month}${day}`;
+                
+                let light = await getlight(user.uid);
+                
+                setLight(light);
+                // await errorTemper(latest.temp);
+                // await errorHumi(latest.humid);
+
+                // axios 
+                // .get(`${process.env.REACT_APP_API_AI}`)
+                // .then(res => {
+                //     setFace(res.data[0].value)
+                // })
+                // .catch(err => console.error(err))
+
+                console.log("RUN")
+            }
+            catch (err) {
+                console.error("Fail", err)
+            }
+             }, 5000);
+            return () => clearInterval(intervalId);
+
+    }, [light]);
+
+   
 
     async function errorLight (light) {
         if (light< 20 || light > 400) {
@@ -74,7 +111,7 @@ function Light() {
 
     // var clockLight = light;
 
-    var clockLight = 50;
+    var clockLight = light;
     console.log("light", light);
     var colorLight = "rgb(236, 241, 50)";
 

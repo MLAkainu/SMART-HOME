@@ -54,7 +54,7 @@ export const logout = async (dispatch, navigate) => {
 export const updatelight = async (uid, dispatch, date) => {
     dispatch(updatelightStart())
     try {
-        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/light`, {
+        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/lux`, {
             responseType: 'json',
             withCredentials: true,
             uid

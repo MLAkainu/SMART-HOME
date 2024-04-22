@@ -39,18 +39,10 @@ const showToastHumi = () => {
     });
 };
 
-function TemperHumi() {
+function TemperHumi({user}) {
     //lay du lieu user tu api
     // const user = useSelector((state) => state.auth_.login?.currentUser)
-    const user = {
-        data: {
-            id: 1,
-            firstname: "Nguyễn",
-            lastname: "Văn A",
-            phonenumber: "0123456789",
-            username: "nguyenvana",
-        }
-    }
+    
 
     const dispatch = useDispatch();
 
@@ -92,6 +84,40 @@ function TemperHumi() {
     const [filter, setFilter] = useState(0);
     const [selectdate, setSelectdate] = useState(new Date());
 
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            try {
+                let date = new Date();
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
+                let temp = `${year}${month}${day}`;
+                let latest = await updatetemperhumid(user.uid, dispatch, temp);
+               
+                setTemper(latest.temp);
+                setHumid(latest.humid);
+                
+                // await errorTemper(latest.temp);
+                // await errorHumi(latest.humid);
+
+                // axios 
+                // .get(`${process.env.REACT_APP_API_AI}`)
+                // .then(res => {
+                //     setFace(res.data[0].value)
+                // })
+                // .catch(err => console.error(err))
+
+                console.log("RUN")
+            }
+            catch (err) {
+                console.error("Fail", err)
+            }
+             }, 5000);
+            return () => clearInterval(intervalId);
+
+    }, []);
+
+
     // useEffect(() => {
     //     const intervalId = setInterval(async () => {
     //         try {
@@ -122,8 +148,8 @@ function TemperHumi() {
 
     // var clockTemper = temper == 0 ? 0 : temper
     // var clockHumi = humid == 0 ? 0 : humid
-    var clockTemper = 30
-    var clockHumi = 50
+    var clockTemper = temper;
+    var clockHumi = humid;
     var colorTemper = '#ff6384';
     var colorHumi = '#3ecdef';
     // var colorTemper = clockTemper < 15 || clockTemper > 50 ? "#ff6384" : '#3ecdef';

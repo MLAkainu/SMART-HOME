@@ -53,8 +53,8 @@ function App() {
       <Routes>
         <Route element={<DefaultLayout setToken={setTokenToNull} user={user}  />}>
           <Route path="/dashboard" element={<Dashboard user={user} />} />
-          <Route path="/light" element={<Light />} />
-          <Route path="/temperhumi" element={<TemperHumi />} />
+          <Route path="/light" element={<Light user={user} />} />
+          <Route path="/temperhumi" element={<TemperHumi user={user} />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/user" element={<User user={user}/>} />
         </Route>
