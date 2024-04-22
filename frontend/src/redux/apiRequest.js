@@ -59,18 +59,19 @@ export const updatelight = async (uid, dispatch, date) => {
             withCredentials: true,
             uid
         })
-        const res = {
-            light: light.data.message.payload
-        }
-        if (light === undefined || light.data.message.payload === undefined) {
-            res.light = []
-            dispatch(updatelightSuccess(res))
-            return 0
-        }
-        else {
-            dispatch(updatelightSuccess(res))
-            return light.data.message.latest.value
-        }
+        return light.data
+        // const res = {
+        //     light: light.data.message.payload
+        // }
+        // if (light === undefined || light.data.message.payload === undefined) {
+        //     res.light = []
+        //     dispatch(updatelightSuccess(res))
+        //     return 0
+        // }
+        // else {
+        //     dispatch(updatelightSuccess(res))
+        //     return light.data.message.latest.value
+        // }
     }
     catch (err) {
         dispatch(updatelightFailed())
