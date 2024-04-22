@@ -9,26 +9,15 @@ import { changeavatar, changeinfor, changepass } from '../../redux/apiRequest';
 function User(props) {
 
     console.log(props);
-    const user = {
-        data: {
-            id: 1,
-            firstname: "Lokk",
-            lastname: "Nguyen Minh",
-            email: "minhloc1605@icloud.com",
-            phonenumber: "0123456789",
-            username: "lokknm",
-            password: "123456",
-            avatar: "../../../assets/avatar.jpg"
-        }
-    }
+    
     const [firstname, setFirstname] = useState(props.user.fname);
     const [lastname, setLastname] = useState(props.user.lname);
-    const [email, setEmail] = useState(user.data.email);
+    const [email, setEmail] = useState(props.user.email);
     const [phonenumber, setPhonenumber] = useState(props.user.phoneNo);
     const [oldpassword, setOldpassword] = useState('');
     const [newpassword, setNewpassword] = useState('');
-    const [avatar, setAvatar] = useState(user.data.avatar);
-    const [avatarchange, setAvatarchange] = useState(user.data.avatar);
+    const [avatar, setAvatar] = useState(props.user.avatar);
+    const [avatarchange, setAvatarchange] = useState(props.user.avatar);
     const form1Ref = useRef(null);
     const form2Ref = useRef(null);
     const form3Ref = useRef(null);

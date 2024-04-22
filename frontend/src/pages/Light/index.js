@@ -22,7 +22,7 @@ function Light({user}) {
     
 
     const [lights, setLights] = useState([]);
-    const [light, setLight] = useState();
+    const [light, setLight] = useState(0);
     const [filter, setFilter] = useState(0);
     const [selecdate, setSelecdate] = useState(new Date());
     const showToastLight = () => {
