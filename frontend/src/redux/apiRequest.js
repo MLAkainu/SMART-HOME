@@ -92,6 +92,9 @@ export const updatetemperhumid = async (uid, dispatch, date) => {
             withCredentials: true,
             uid
         })
+        if (temp.data === 'error' || humid.data === 'error'){
+            return {temp:0,humid:0}
+        }
         return {temp:temp.data,humid:humid.data}
         // const res = {
         //     humid: humid.data.message.payload,
@@ -163,15 +166,50 @@ export const changepass = async (uid, changepass, dispatch, id) => {
         alert("Change Password Failed")
     }
 }
-export const putmessage = async (uid, message, id) => {
+export const putmessage = async (message,uid,mtype,val) => {
     try {
-        await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/noty/push?id=${id}`, message, {
+        await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/noty/push`, {uid,message,val,mtype}, {
             withCredentials: true
         })
     } catch (err) {
         console.log(err)
     }
 }
+export const writeLight = async (val) => {
+    try {
+        console.log(val)
+        console.log(`${process.env.REACT_APP_API_ENDPOINT}/api/equip/light`);
+        await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/equip/light`,{val})
+    }
+    catch (err){
+        console.log(err)
+    }
+}
+
+export const writeFan = async (val) => {
+  try {
+    console.log(val);
+    await axios.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/api/equip/`,
+      { val }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const writeDoor = async (val) => {
+  try {
+    console.log(val);
+    await axios.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/light`,
+      { val }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getmessage = async (uid, id) => {
     try {
         const data = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/noty/get?id=${id}`, {

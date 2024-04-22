@@ -214,25 +214,12 @@ const getNotifs = async (req, res) => {
 
 const createActivity = async (req, res) => {
   try {
-    const userRef = collection(db, "Users");
-    const q = query(userRef, where("userName", "==", req.params.userName));
-    let userId;
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      userId = doc.id;
-    });
-    if (userId) {
-      const actRef = collection(db, "Users", userId, "Activitites");
-      const act = {
-        type: req.body.type,
-        content: req.body.content,
-        createdAt: serverTimestamp(),
-      };
-      await addDoc(actRef, act);
-      res.status(200).json({ message: "notif created" });
-    } else {
-      res.status(404).json({ message: "user not found" });
-    }
+    const userRef = collection(db, "Users",req.body.uid,`/${req.body.type}`);
+    const docRef = await addDoc(userRef, {
+      val: req.body.val,
+      timeStamp:serverTimestamp()
+    })
+    res.status(200).json({message:"activity recorded"})
   } catch (err) {
     console.log(err);
   }

@@ -11,7 +11,7 @@ import { FaFan } from "react-icons/fa";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa";
 
-import { updatetemperhumid, putmessage,updateai, getlight } from '../../redux/apiRequest';
+import { updatetemperhumid, putmessage,updateai, getlight, writeLight } from '../../redux/apiRequest';
 
 import "./Dashboard.css";
 import 'react-toastify/dist/ReactToastify.css';
@@ -53,21 +53,22 @@ function Dashboard({user}) {
 
 
     // công tắc đèn led 
-    const [ledBtn, setLed] = useState(0);
+    const [ledBtn, setLed] = useState(false);
 
     const clickLed = async () => {
         let message = {
             content: "",
             type: "1",
         }
-        if (ledBtn == 0) {
+        if (ledBtn === 0) {
             message.content = "Bật đèn";
         }
         else {
             message.content = "Tắt đèn";
         }
-        await putmessage(message, user.uid)
+        // await putmessage(message, user.uid)
         setLed(!ledBtn);
+        await writeLight(!ledBtn)
     }
 
     //công tắc fan
@@ -95,14 +96,14 @@ function Dashboard({user}) {
             content: "",
             type: "1",
         }
-        if (doorBtn == 0) {
+        if (doorBtn === 0) {
             message.content = "Mở cửa";
         }
         else {
             message.content = "Đóng cửa";
         }
-        await putmessage(message, user.data.id)
         setDoor(!doorBtn);
+        // await putmessage(message, user.data.uid,'DOOR',doorBtn)
     }
 
 
@@ -144,9 +145,9 @@ function Dashboard({user}) {
 
 
     //lay data
-    const [tempers, setTemper] = useState([]);
-    const [humid, setHumid] = useState([]);
-    const [lux, setLux] = useState([]);
+    const [tempers, setTemper] = useState();
+    const [humid, setHumid] = useState();
+    const [lux, setLux] = useState(32);
 
 
     useEffect(() => {
@@ -158,12 +159,12 @@ function Dashboard({user}) {
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
                 let latest = await updatetemperhumid(user.uid, dispatch, temp);
-                let light = await getlight(user.uid);
+                // let light = await getlight(user.uid);
                 setTemper(latest.temp);
                 setHumid(latest.humid);
-                setLux(light);
-                await errorTemper(latest.temp);
-                await errorHumi(latest.humid);
+                // setLux(light);
+                // await errorTemper(latest.temp);
+                // await errorHumi(latest.humid);
 
                 // axios 
                 // .get(`${process.env.REACT_APP_API_AI}`)
@@ -183,22 +184,22 @@ function Dashboard({user}) {
     }, [tempers]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        var data = { value: 0};
-        if (ledBtn) data.value = 1;
+    //     var data = { value: 0};
+    //     if (ledBtn) data.value = 1;
 
-        fetch( `${process.env.REACT_APP_API_LED}`, {
-            method: 'POST',
-            headers: {
-                'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}` ,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => console.log(response.status))
-        .catch(error => console.error(error));
-    }, [ledBtn]);
+    //     fetch( `${process.env.REACT_APP_API_LED}`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}` ,
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data)
+    //     })
+    //     .then(response => console.log(response.status))
+    //     .catch(error => console.error(error));
+    // }, [ledBtn]);
 
     useEffect(()=>{
        
