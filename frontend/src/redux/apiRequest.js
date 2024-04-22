@@ -79,6 +79,7 @@ export const updatelight = async (uid, dispatch, date) => {
     }
 }
 
+
 export const updatetemperhumid = async (uid, dispatch, date) => {
     dispatch(updatetemperhumidStart())
     try {
@@ -189,10 +190,8 @@ export const writeLight = async (val) => {
 export const writeFan = async (val) => {
   try {
     console.log(val);
-    await axios.post(
-      `${process.env.REACT_APP_API_ENDPOINT}/api/equip/`,
-      { val }
-    );
+    console.log(`${process.env.REACT_APP_API_ENDPOINT}/api/equip/fan`);
+    await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/equip/fan`,{val})
   } catch (err) {
     console.log(err);
   }
@@ -201,8 +200,9 @@ export const writeFan = async (val) => {
 export const writeDoor = async (val) => {
   try {
     console.log(val);
+    console.log(`${process.env.REACT_APP_API_ENDPOINT}/api/equip/door`);
     await axios.post(
-      `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/light`,
+      `${process.env.REACT_APP_API_ENDPOINT}/api/equip/door`,
       { val }
     );
   } catch (err) {
@@ -223,7 +223,7 @@ export const getmessage = async (uid, id) => {
 
 export const getlight = async (uid, date) => {
     try {
-        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/light`, {
+        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/lux`, {
             responseType: 'json',
             withCredentials: true,
             uid

@@ -11,7 +11,7 @@ import { FaFan } from "react-icons/fa";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa";
 
-import { updatetemperhumid, putmessage,updateai, getlight, writeLight } from '../../redux/apiRequest';
+import { updatetemperhumid, putmessage,updateai, getlight, writeLight, writeFan, writeDoor } from '../../redux/apiRequest';
 
 import "./Dashboard.css";
 import 'react-toastify/dist/ReactToastify.css';
@@ -72,7 +72,7 @@ function Dashboard({user}) {
     }
 
     //công tắc fan
-    const [fanBtn, setFan] = useState(0);
+    const [fanBtn, setFan] = useState(false);
     const clickFan = async () => {
         let message = {
             content: "",
@@ -84,13 +84,13 @@ function Dashboard({user}) {
         else {
             message.content = "Tắt quạt";
         }
-        await putmessage(message, user.id)
         setFan(!fanBtn);
+        await writeFan(!fanBtn);
     }
 
 
     //coong tắc cửa
-    const [doorBtn, setDoor] = useState(0);
+    const [doorBtn, setDoor] = useState(false);
     const clickDoor = async () => {
         let message = {
             content: "",
@@ -103,6 +103,7 @@ function Dashboard({user}) {
             message.content = "Đóng cửa";
         }
         setDoor(!doorBtn);
+        await writeDoor(!doorBtn);
         // await putmessage(message, user.data.uid,'DOOR',doorBtn)
     }
 
@@ -147,7 +148,7 @@ function Dashboard({user}) {
     //lay data
     const [tempers, setTemper] = useState();
     const [humid, setHumid] = useState();
-    const [lux, setLux] = useState(32);
+    const [lux, setLux] = useState();
 
 
     useEffect(() => {
@@ -159,10 +160,10 @@ function Dashboard({user}) {
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
                 let latest = await updatetemperhumid(user.uid, dispatch, temp);
-                // let light = await getlight(user.uid);
+                let light = await getlight(user.uid);
                 setTemper(latest.temp);
                 setHumid(latest.humid);
-                // setLux(light);
+                setLux(light);
                 // await errorTemper(latest.temp);
                 // await errorHumi(latest.humid);
 
@@ -201,41 +202,41 @@ function Dashboard({user}) {
     //     .catch(error => console.error(error));
     // }, [ledBtn]);
 
-    useEffect(()=>{
+    // useEffect(()=>{
        
-        var data = { value: 0 };  
-        if (fanBtn) data.value = 1;
+    //     var data = { value: 0 };  
+    //     if (fanBtn) data.value = 1;
        
         
-        fetch(`${process.env.REACT_APP_API_FAN}`, {
-        method: 'POST',
-        headers: {
-            'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-        })
-        .then(response => console.log(response.status))
-        .catch(error => console.error(error));
-    },[fanBtn])
+    //     fetch(`${process.env.REACT_APP_API_FAN}`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}`,
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(data)
+    //     })
+    //     .then(response => console.log(response.status))
+    //     .catch(error => console.error(error));
+    // },[fanBtn])
 
-    useEffect(()=>{
+    // useEffect(()=>{
        
-        var data = { value: 0 };  
-        if (doorBtn) data.value = 1;
+    //     var data = { value: 0 };  
+    //     if (doorBtn) data.value = 1;
        
         
-        fetch( `${process.env.REACT_APP_API_DOOR}`, {
-        method: 'POST',
-        headers: {
-            'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-        })
-        .then(response => console.log(response.status))
-        .catch(error => console.error(error));
-    },[doorBtn])
+    //     fetch( `${process.env.REACT_APP_API_DOOR}`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}`,
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(data)
+    //     })
+    //     .then(response => console.log(response.status))
+    //     .catch(error => console.error(error));
+    // },[doorBtn])
 
 
     return (
