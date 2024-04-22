@@ -53,9 +53,10 @@ export const logout = async (dispatch, navigate) => {
 export const updatelight = async (uid, dispatch, date) => {
     dispatch(updatelightStart())
     try {
-        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=light&date=${date}`, {
+        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/light`, {
             responseType: 'json',
-            withCredentials: true
+            withCredentials: true,
+            uid
         })
         const res = {
             light: light.data.message.payload
@@ -79,13 +80,15 @@ export const updatelight = async (uid, dispatch, date) => {
 export const updatetemperhumid = async (uid, dispatch, date) => {
     dispatch(updatetemperhumidStart())
     try {
-        let temp = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=temp&date=${date}`, {
+        let temp = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/temp`, {
             responseType: 'json',
-            withCredentials: true
+            withCredentials: true,
+            uid
         })
-        let humid = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=humid&date=${date}`, {
+        let humid = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/humid`, {
             responseType: 'json',
-            withCredentials: true
+            withCredentials: true,
+            uid
         })
         const res = {
             humid: humid.data.message.payload,
@@ -179,9 +182,10 @@ export const getmessage = async (uid, id) => {
 
 export const getlight = async (uid, date) => {
     try {
-        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=light&date=${date}`, {
+        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/light`, {
             responseType: 'json',
-            withCredentials: true
+            withCredentials: true,
+            uid
         })
         return light.data.message.payload
     }
@@ -192,9 +196,10 @@ export const getlight = async (uid, date) => {
 }
 export const gettemper = async (uid, date) => {
     try {
-        let temper = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=temp&date=${date}`, {
+        let temper = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/temp`, {
             responseType: 'json',
-            withCredentials: true
+            withCredentials: true,
+            uid
         })
         return temper.data.message.payload
     }
@@ -205,9 +210,10 @@ export const gettemper = async (uid, date) => {
 }
 export const gethumid = async (uid, date) => {
     try {
-        let humid = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat?type=humid&date=${date}`, {
+        let humid = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/humid`, {
             responseType: 'json',
-            withCredentials: true
+            withCredentials: true,
+            uid
         })
         return humid.data.message.payload
     }

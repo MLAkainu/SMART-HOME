@@ -23,7 +23,7 @@ app.use('/api',rtrouter)
 
 // not found
 app.use("*", (req, res) => {
-  res.json({ msg: "not found" });
+  res.json({ msg: "api not found" });
 });
 
 // port
