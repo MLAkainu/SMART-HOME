@@ -5,12 +5,13 @@ import { useSelector, useDispatch } from "react-redux"
 import mountain from "../../assets/mountain.jpg";
 import water from "../../assets/water.jpg";
 import smoke from "../../assets/smoke.jpg";
+import lux1 from "../../assets/lux.jpg";
 
 import { FaFan } from "react-icons/fa";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa";
 
-import { updatetemperhumid, putmessage,updateai } from '../../redux/apiRequest';
+import { updatetemperhumid, putmessage,updateai, getlight } from '../../redux/apiRequest';
 
 import "./Dashboard.css";
 import 'react-toastify/dist/ReactToastify.css';
@@ -145,6 +146,9 @@ function Dashboard({user}) {
     //lay data
     const [tempers, setTemper] = useState([]);
     const [humid, setHumid] = useState([]);
+    const [lux, setLux] = useState([]);
+
+
     useEffect(() => {
         const intervalId = setInterval(async () => {
             try {
@@ -154,8 +158,10 @@ function Dashboard({user}) {
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
                 let latest = await updatetemperhumid(user.uid, dispatch, temp);
+                let light = await getlight(user.uid);
                 setTemper(latest.temp);
                 setHumid(latest.humid);
+                setLux(light);
                 await errorTemper(latest.temp);
                 await errorHumi(latest.humid);
 
@@ -350,7 +356,7 @@ function Dashboard({user}) {
             </div>
             <div className="dashBoard__right">
                 <div className="dashBoard__right-temper">
-                    <h3 className="temper__infor">It's hot</h3>
+                    <h3 className="temper__infor">Temperature</h3>
                     <h3 className="temper__text"> { tempers}°C</h3>
                     {/* <h3 className="temper__text"> {
 
@@ -366,13 +372,13 @@ function Dashboard({user}) {
                     }%</h3> */}
                     <img src={water} className="temper__scene" />
                 </div>
-                <div className="dashBoard__right-smoke">
-                    <h3 className="temper__infor2">Smoke</h3>
-                    <h3 className="temper__text2"> 0%</h3>
+                <div className="dashBoard__right-lux">
+                    <h3 className="temper__infor2">Light intensity</h3>
+                    <h3 className="temper__text2">{lux} lux</h3>
                     {/* <h3 className="temper__text"> {
                         humis.length > 0 ? humis : 0
                     }%</h3> */}
-                    <img src={smoke} className="temper__scene" />
+                    <img src={lux1} className="temper__scene-lux" />
                 </div>
 
 

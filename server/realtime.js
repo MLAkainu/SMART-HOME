@@ -80,7 +80,7 @@ export const writeLight = (req, res) => {
 export const readLight = (req, res) => {
   const db = getDatabase();
   // const temp = ref(db, `${req.body.uid}/light`)
-  const temp = ref(db, `YSY-1/LIGHT`)
+  const temp = ref(db, `SYS-1/LUX`)
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     res.status(200).json(data)
