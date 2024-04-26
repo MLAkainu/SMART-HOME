@@ -111,11 +111,9 @@ const updateUser = async (req, res) => {
       email: req.body.email,
       password:req.body.password,
     })
-    console.log(userRecord)
     const user = req.body;
     delete user.uid;
     delete user.email;
-    delete user.password;
     
     await updateDoc(doc(db, "Users", userRecord.uid),user)
     res.status(200).json({ mgs: "user upated" });
@@ -126,88 +124,72 @@ const updateUser = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
-  try {
-    const uid = req.body.uid;
-    if (uid) {
-      const notifQuerySnapShot = await getDocs(
-        collection(db, "Users", uid, "Notifs")
-      );
-      notifQuerySnapShot.forEach(async (document) => {
-        await deleteDoc(doc(db, "Users", uid, "Notifs", document.id));
-      });
-      const actQuerySnapShot = await getDocs(
-        collection(db, "Users", uid, "Activities")
-      );
-      actQuerySnapShot.forEach(async (document) => {
-        await deleteDoc(doc(db, "Users", uid, "Activities", document.id));
-      });
-      await deleteDoc(doc(db, "Users", uid));
-      res.status(200).json({ message: "user deleted" });
-    } else {
-      res.status(404).json({ message: "user not found" });
-    }
-    await getAuth().deleteUser(req.body.uid);
-  } catch (error) {
-    console.log(error);
-    res.json({message:"error when deleting user"})
-  }
-};
+// const deleteHelper = async (type,uid) => {
+//   const querySnapShot = await getDocs(collection(db, "Users", uid, type));
+//   querySnapShot.forEach(async q => {
+//     await deleteDoc(doc(db,"Users",uid,type,q.id))
+//   })
+// }
+
+// const deleteUser = async (req, res) => {
+//   try {
+//     const uid = req.body.uid;
+//     if (uid) {
+//       deleteHelper("Notifs", uid)
+//       deleteHelper("humid", uid)
+//       deleteHelper('temp', uid)
+//       deleteHelper('light',uid)
+//       await deleteDoc(doc(db, "Users", uid));
+//       res.status(200).json({ message: "user deleted" });
+//     } else {
+//       res.status(404).json({ message: "user not found" });
+//     }
+//     await getAuth().deleteUser(req.body.uid);
+//   } catch (error) {
+//     console.log(error);
+//     res.json({message:"error when deleting user"})
+//   }
+// };
 
 const createNotif = async (req, res) => {
-  try {
-    const userRef = collection(db, "Users");
-    const q = query(userRef, where("userName", "==", req.params.userName));
-    let userId;
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      userId = doc.id;
-    });
-    if (userId) {
-      const notifRef = collection(db, "Users", userId, "Notifs");
-      const notif = {
+    try {
+      const userRef = collection(db, "Users", req.body.uid, `/Notifs`);
+      const docRef = await addDoc(userRef, {
         type: req.body.type,
-        content: req.body.content,
-        createdAt: serverTimestamp(),
-      };
-      await addDoc(notifRef, notif);
+        message: req.body.message,
+        timeStamp: serverTimestamp(),
+      });
       res.status(200).json({ message: "notif created" });
-    } else {
-      res.status(404).json({ message: "user not found" });
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
 };
 
 const getNotifs = async (req, res) => {
   try {
-    const userRef = collection(db, "Users");
-    const q = query(userRef, where("userName", "==", req.params.userName));
-    let userId;
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      userId = doc.id;
-    });
-    if (userId) {
-      const querySnapShot = await getDocs(
-        collection(db, "Users", userId, "Notifs")
-      );
-      const notifs = [];
-      querySnapShot.forEach((doc) => {
-        let data = doc.data();
-        const time = new Date(data.createdAt.toDate());
-        data = {
-          ...data,
-          createdAt: time,
-        };
-        notifs.push(data);
+    const userRef = collection(db, "Users", req.body.uid, "Notifs");
+    const date = new Date(req.body.date);
+    const startTime = new Date(date.setHours(0, 0, 0, 0));
+    const endTime = new Date(date.setHours(23, 59, 59, 999));
+    console.log(startTime);
+    console.log(endTime);
+    const q = query(
+      userRef,
+      where("timeStamp", ">=", startTime),
+      where("timeStamp", "<=", endTime)
+    );
+    const querySnapShot = await getDocs(q);
+    const acts = [];
+    querySnapShot.forEach((act) => {
+      acts.push({
+        type: act.data().type,
+        message: act.data().message,
+        timeStamp: act.data().timeStamp.toDate(),
       });
-      res.status(200).json(notifs);
-    } else {
-      res.status(404).json({ message: "user not found" });
-    }
+    });
+    res.send(acts);
   } catch (err) {
+    res.status(400).json({ message: "can not get notifs" });
     console.log(err);
   }
 };
@@ -227,32 +209,26 @@ const createActivity = async (req, res) => {
 
 const getActivities = async (req, res) => {
   try {
-    const userRef = collection(db, "Users");
-    const q = query(userRef, where("userName", "==", req.params.userName));
-    let userId;
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      userId = doc.id;
-    });
-    if (userId) {
-      const querySnapShot = await getDocs(
-        collection(db, "Users", userId, "Activities")
-      );
-      const acts = [];
-      querySnapShot.forEach((doc) => {
-        let data = doc.data();
-        const time = new Date(data.createdAt.toDate());
-        data = {
-          ...data,
-          createdAt: time,
-        };
-        acts.push(data);
+    const userRef = collection(db, "Users", req.body.uid, req.body.type);
+    const date = new Date(req.body.date)
+    const startTime = new Date(date.setHours(0, 0, 0, 0))
+    const endTime = new Date(date.setHours(23, 59, 59, 999));
+    console.log(startTime)
+    console.log(endTime)
+    const q = query(userRef, where("timeStamp", ">=", startTime), where("timeStamp", "<=", endTime));
+    const querySnapShot = await getDocs(q);
+    const acts = []
+    querySnapShot.forEach(act => {
+      acts.push({
+        val: act.data().val,
+        timeStamp: act.data().timeStamp.toDate(),
       });
-      res.status(200).json(atcs);
-    } else {
-      res.status(404).json({ message: "user not found" });
-    }
+
+    })
+    res.send(acts)
+    
   } catch (err) {
+    res.status(400).json({message:"can not get activities"})
     console.log(err);
   }
 };
@@ -273,7 +249,7 @@ const verifyUser = async (req, res) => {
 router.route("/user/new").post(createUser);
 router.route("/user/login").post(loginUser);
 router.route('/user/verify').post(verifyUser);
-router.route("/user/").get(getUser).put(updateUser).delete(deleteUser);
+router.route("/user/").get(getUser).put(updateUser)//.delete(deleteUser);
 router.route("/notifs").post(createNotif).get(getNotifs);
 router.route("/activities").get(getActivities).post(createActivity);
 
