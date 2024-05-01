@@ -39,7 +39,7 @@ const showToastHumi = () => {
     });
 };
 
-function TemperHumi({user}) {
+function TemperHumi({token}) {
     //lay du lieu user tu api
     // const user = useSelector((state) => state.auth_.login?.currentUser)
     
@@ -92,7 +92,7 @@ function TemperHumi({user}) {
                 let month = date.getMonth() + 1;
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
-                let latest = await updatetemperhumid(user.uid, dispatch, temp);
+                let latest = await updatetemperhumid(token, dispatch, temp);
                
                 setTemper(latest.temp);
                 setHumid(latest.humid);

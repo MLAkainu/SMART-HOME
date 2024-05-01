@@ -13,7 +13,7 @@ import "react-circular-progressbar/dist/styles.css";
 
 
 
-function Light({user}) {
+function Light({token}) {
     const dispatch = useDispatch();
     //lay data tu api light
     // let getLights = useSelector(state => state.IoT.light);
@@ -47,7 +47,7 @@ function Light({user}) {
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
                 
-                let light = await getlight(user.uid);
+                let light = await getlight(token);
                 
                 setLight(light);
                 // await errorTemper(latest.temp);

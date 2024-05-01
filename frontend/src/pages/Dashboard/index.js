@@ -42,7 +42,7 @@ import 'react-toastify/dist/ReactToastify.css';
 //     });
 // };
 
-function Dashboard({user}) {
+function Dashboard({token}) {
 
     const dispatch = useDispatch();
 
@@ -159,8 +159,8 @@ function Dashboard({user}) {
                 let month = date.getMonth() + 1;
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
-                let latest = await updatetemperhumid(user.uid, dispatch, temp);
-                let light = await getlight(user.uid);
+                let latest = await updatetemperhumid(token, dispatch, temp);
+                let light = await getlight(token);
                 setTemper(latest.temp);
                 setHumid(latest.humid);
                 setLux(light);
