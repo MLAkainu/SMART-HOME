@@ -118,7 +118,7 @@ export const writeDoor = (req, res) => {
   //   LIGHT: req.body.val,
     // });
     const updates = {};
-    updates['SYS-1/DOOR'] = req.body.val
+    updates['SYS-1/ALARM'] = req.body.val
     update(ref(db),updates)
     res.status(200).json({ message: 'data recorded' })
   }
