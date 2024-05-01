@@ -219,10 +219,11 @@ const getActivities = async (req, res) => {
     const querySnapShot = await getDocs(q);
     const acts = []
     querySnapShot.forEach(act => {
-      acts.push({
-        val: act.data().val,
-        timeStamp: act.data().timeStamp.toDate(),
-      });
+      acts.push(act.data().val)//{
+        //val:act.data().val,
+       // timeStamp: act.data().timeStamp.toDate(),
+      //}
+      //);
 
     })
     res.send(acts)
