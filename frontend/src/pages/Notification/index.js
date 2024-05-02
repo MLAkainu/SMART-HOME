@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 
 function Notification() { 
-    const [mes, setMes] = useState([]);
+    // const [mes, setMes] = useState([]);
     const user = {
         data: {
             id: 1,
@@ -22,6 +22,34 @@ function Notification() {
     //     }
     //     getmess()
     // }, [])
+
+    var mes = []
+
+    mes = [{
+        content: "Cửa đã được mở",
+        date: "2024-10-10",
+        type: "1"
+    }, {
+        content: "Đèn đã được bật",
+        date: "2024-10-10",
+        type: "2"
+    }, {
+        content: "Quạt đã được bật",
+        date: "2024-10-10",
+        type: "3"
+    } ,
+
+    { content: "Cửa đã được mở",
+    date: "2024-10-10",
+    type: "4"
+    }, 
+    { content: "Cửa đã được mở",
+    date: "2024-10-10",
+    type: "5"
+    },
+    
+
+]
 
     console.log("Result",mes)
     mes.reverse()
