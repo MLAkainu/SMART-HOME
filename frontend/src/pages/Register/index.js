@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { register } from '../../redux/apiRequest';
 import { useDispatch } from 'react-redux';
 
-function Register({setToken}) {
+function Register({auth}) {
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
     const [phoneNo, setPhoneNo] = useState('')
@@ -38,26 +38,28 @@ function Register({setToken}) {
         // }
 
         try {
+            const userCredential = await auth.createUserWithEmailAndPassword(
+          email,
+          password
+        );;
+            const idToken = await auth.currentUser.getIdToken();
             const newUser = {
                 fname: fname,
                 lname: lname,
                 phoneNo: phoneNo,
-                email: email,
-                password: password
-            }
-            let response = await register(newUser, dispatch, navigate,setToken);
-            console.log(response.data); // chuỗi token trả về từ server
-            alert('Đăng ký tài khoản thành công');
-            navigate('/');
-
+                token:idToken
+            };
+            await auth.signOut();
+            await register(newUser, dispatch, navigate);
+            alert("Đăng ký tài khoản thành công");
+            navigate("/");
         }
-        catch (error) {
-            console.error(error);
-            alert('Đăng ký tài khoản thất bại');
-            navigate('/register')
+        catch (err) {
+            await auth.signOut();
+            alert("Đăng ký tài khoản thất bại");
+            console.log(err)
+            navigate("/register");
         }
-
-
 
     };
     return (

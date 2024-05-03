@@ -24,9 +24,8 @@ import axios from 'axios';
 
 
 
-function DefaultLayout(props) {
+function DefaultLayout({auth,user}) {
 
-    console.log(props.user)
     
   
     const navigate = useNavigate();
@@ -126,96 +125,133 @@ function DefaultLayout(props) {
       //   if (window.confirm('Bạn có muốn đăng xuất không ?')) {
       //       logout(dispatch, navigate)
       //     }
-      props.setToken()
-      localStorage.setItem("token", "");
+      const signOut = async () => {
+        try {
+          await auth.signOut();
+          console.log("User signed out successfully");
+        } catch (error) {
+          console.error("Error signing out:", error);
+        }
+      };
+      signOut()
       navigate("/");
     }
     return (
-        <div className="App">
-          <div className="wrapper">
-            <div className="cover">
-              <div className="cover__item item1"></div>
-              <div className="cover__item item2"></div>
-              <div className="cover__item item3"></div>
-              <div className="cover__item item4"></div>
-            </div>
-            <div class="center">
-              <div className="main">
-                <div className="siderbar">
-                  <ul className="siderbar__list">
-                    <li className="siderbar__list-item" style={btnSider == 0 ? active : {}}>
-                      <Link to="/dashboard" onClick={() => setBtnSider(0)}>
-                        <i class="home-icon"><IoHome /></i>
-                      </Link>
-                    </li>
-                    <li className="siderbar__list-item" style={btnSider == 2 ? active : {}}>
-                      <Link to="/light" onClick={() => setBtnSider(2)}>
-                        <i class="light-icon"><FaRegLightbulb /></i>
-                      </Link>
-                    </li>
-                    <li className="siderbar__list-item" style={btnSider == 3 ? active : {}}>
-                      <Link to="/temperHumi" onClick={() => setBtnSider(3)}>
-                        <i class="temper-icon"><FaTemperatureLow /></i>
-                      </Link>
-                    </li>
-                    <li className="siderbar__list-item" style={btnSider == 4 ? active : {}}>
-                      <Link to="/notification" onClick={() => setBtnSider(4)}>
-                        <i class="gear-icon"><IoNotificationsOutline /></i>
-                      </Link>
-                    </li>
-                    <li className="siderbar__list-item" style={btnSider == 5 ? active : {}}>
-                      <div className="logout-wrapper" onClick={handlelogout}>
-                        <i class="logout-icon"><FaPowerOff /></i>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div className="container">
-                  <header className="header">
-                    <nav className="navbar">
-                      <div class="navbar__logo">
-                        <i class="logo-icon fa-solid fa-layer-group"></i>
-                        SMART HOME
-                      </div>
-                      <div className="navbar__account">
-                        <Link to="/user">
-                          {/* <img className="navbar__account-img" src={user.data.avatar=="None"?avt:user.data.avatar} /> */}
-                          
-                            <img className="navbar__account-img" src={props.user.avatar==null?avt:props.user.avatar
-                            } />
-                        </Link>
-                      </div>
-                    </nav>
-                    <div className="header__time">
-                      <div className="header__time-greeting">
-                        {/* <span className="greeting1">Good morning, {user.data.firstname}</span> */}
-                        <span className="greeting1"> {title} {props.user.fname} </span>
-                        <span className="greeting2">Have a nice day</span>
-                      </div>
-                      <div className="header__time-weather">
-                        <img src={weather} className="weather-icon" />
-                      </div>
-                      <div className="header__time-infor">
-    
-                        <span className="time1">{hour}:{date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()}
-                          {
-                            date.getHours() >= 12 ? " PM" : " AM"
-                          } </span>
-                        <span className="time2">{day}, {date.getDate()} {month} {date.getFullYear()}</span>
-                      </div>
+      <div className="App">
+        <div className="wrapper">
+          <div className="cover">
+            <div className="cover__item item1"></div>
+            <div className="cover__item item2"></div>
+            <div className="cover__item item3"></div>
+            <div className="cover__item item4"></div>
+          </div>
+          <div class="center">
+            <div className="main">
+              <div className="siderbar">
+                <ul className="siderbar__list">
+                  <li
+                    className="siderbar__list-item"
+                    style={btnSider == 0 ? active : {}}
+                  >
+                    <Link to="/dashboard" onClick={() => setBtnSider(0)}>
+                      <i class="home-icon">
+                        <IoHome />
+                      </i>
+                    </Link>
+                  </li>
+                  <li
+                    className="siderbar__list-item"
+                    style={btnSider == 2 ? active : {}}
+                  >
+                    <Link to="/light" onClick={() => setBtnSider(2)}>
+                      <i class="light-icon">
+                        <FaRegLightbulb />
+                      </i>
+                    </Link>
+                  </li>
+                  <li
+                    className="siderbar__list-item"
+                    style={btnSider == 3 ? active : {}}
+                  >
+                    <Link to="/temperHumi" onClick={() => setBtnSider(3)}>
+                      <i class="temper-icon">
+                        <FaTemperatureLow />
+                      </i>
+                    </Link>
+                  </li>
+                  <li
+                    className="siderbar__list-item"
+                    style={btnSider == 4 ? active : {}}
+                  >
+                    <Link to="/notification" onClick={() => setBtnSider(4)}>
+                      <i class="gear-icon">
+                        <IoNotificationsOutline />
+                      </i>
+                    </Link>
+                  </li>
+                  <li
+                    className="siderbar__list-item"
+                    style={btnSider == 5 ? active : {}}
+                  >
+                    <div className="logout-wrapper" onClick={handlelogout}>
+                      <i class="logout-icon">
+                        <FaPowerOff />
+                      </i>
                     </div>
-                  </header>
-                  <div className="content">
-                    <Outlet></Outlet>
+                  </li>
+                </ul>
+              </div>
+              <div className="container">
+                <header className="header">
+                  <nav className="navbar">
+                    <div class="navbar__logo">
+                      <i class="logo-icon fa-solid fa-layer-group"></i>
+                      SMART HOME
+                    </div>
+                    <div className="navbar__account">
+                      <Link to="/user">
+                        {/* <img className="navbar__account-img" src={user.data.avatar=="None"?avt:user.data.avatar} /> */}
+
+                        {/* <img className="navbar__account-img" src={props.user.avatar==null?avt:props.user.avatar
+                            } /> */}
+                      </Link>
+                    </div>
+                  </nav>
+                  <div className="header__time">
+                    <div className="header__time-greeting">
+                      {/* <span className="greeting1">Good morning, {user.data.firstname}</span> */}
+                      <span className="greeting1">
+                        {" "}
+                        {title} {user.fname}{" "}
+                      </span>
+                      <span className="greeting2">Have a nice day</span>
+                    </div>
+                    <div className="header__time-weather">
+                      <img src={weather} className="weather-icon" />
+                    </div>
+                    <div className="header__time-infor">
+                      <span className="time1">
+                        {hour}:
+                        {date.getMinutes() < 10
+                          ? "0" + date.getMinutes()
+                          : date.getMinutes()}
+                        {date.getHours() >= 12 ? " PM" : " AM"}{" "}
+                      </span>
+                      <span className="time2">
+                        {day}, {date.getDate()} {month} {date.getFullYear()}
+                      </span>
+                    </div>
                   </div>
-    
+                </header>
+                <div className="content">
+                  <Outlet></Outlet>
                 </div>
               </div>
             </div>
           </div>
         </div>
-    
-      );
+      </div>
+    );
 
 
 }

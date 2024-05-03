@@ -6,7 +6,7 @@ import { login } from '../../redux/apiRequest';
 // import { login } from '../../redux/apiRequest';
 
 
-function Login({setToken}) {
+function Login({setUser,auth}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -20,9 +20,22 @@ function Login({setToken}) {
         //     password: password
         // }
         // login(newUser, dispatch, navigate);
-        const user = { email, password }
-        login(user, dispatch, navigate,setToken);
-        //avigate('/dashboard');
+        try
+        {
+          const userCredential = await auth.signInWithEmailAndPassword(
+            email,
+            password
+          );
+          setUser(userCredential.user);
+        //   const idToken = await auth.currentUser.getIdToken();
+          navigate("/dashboard");
+        //   login(dispatch, navigate);
+        }
+        catch (err) {
+            console.log(err)
+        }
+        
+        // navigate('/dashboard');
     };
     return (
         <div className='login'>

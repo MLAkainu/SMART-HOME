@@ -6,18 +6,16 @@ import { useSelector } from "react-redux"
 import { TextField, Button, Avatar, Input } from '@mui/material';
 import { changeavatar, changeinfor, changepass } from '../../redux/apiRequest';
 
-function User(props) {
-
-    console.log(props);
+function User({user}) {
     
-    const [firstname, setFirstname] = useState(props.user.fname);
-    const [lastname, setLastname] = useState(props.user.lname);
-    const [email, setEmail] = useState(props.user.email);
-    const [phonenumber, setPhonenumber] = useState(props.user.phoneNo);
+    const [firstname, setFirstname] = useState(user.fname);
+    const [lastname, setLastname] = useState(user.lname);
+    const [email, setEmail] = useState(user.email);
+    const [phonenumber, setPhonenumber] = useState(user.phoneNo);
     const [oldpassword, setOldpassword] = useState('');
     const [newpassword, setNewpassword] = useState('');
-    const [avatar, setAvatar] = useState(props.user.avatar);
-    const [avatarchange, setAvatarchange] = useState(props.user.avatar);
+    const [avatar, setAvatar] = useState(user.avatar);
+    const [avatarchange, setAvatarchange] = useState(user.avatar);
     const form1Ref = useRef(null);
     const form2Ref = useRef(null);
     const form3Ref = useRef(null);

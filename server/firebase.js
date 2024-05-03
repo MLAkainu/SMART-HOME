@@ -44,58 +44,69 @@ export const initializeFirebaseApp = () => {
   }
 };
 
+const verifyToken = async (idToken) => {
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    return decodedToken.uid; // User ID if token is valid
+  } catch (error) {
+    console.error("Error verifying ID token:", error);
+    return null;
+  }
+};
+
+
 const createUser = async (req, res) => {
   try {
-    const userRecord = await getAuth().createUser({
-      email: req.body.email,
-      emailVerified: false,
-      password: req.body.password,
-      disabled: false,
-    });
-    const uid=userRecord.uid
-    console.log("Successfully created new user:", userRecord.uid);
-    await setDoc(doc(db, "Users", userRecord.uid), {
+    const receivedToken = req.body.token; 
+    if (receivedToken === null)
+      throw new Error('error')
+    const uid = await verifyToken(receivedToken);
+    await setDoc(doc(db, "Users", uid), {
       lname: req.body.lname,
       fname: req.body.fname,
       phoneNo: req.body.phoneNo,
-      password:req.body.password,
       avatar: null,
     });
-    res.status(200).send(uid);
+    res.status(200).json({msg:'user created'})
   } catch (error) {
     console.log("Error creating new user:", error);
-    res.status(400).json(error.message);
+    res.status(400).json({msg:"error"});
   }
 };
 
-const loginUser = async (req, res) => {
-  try {
-    const userRecord = await getAuth().getUserByEmail(req.body.email);
-    const uid = userRecord.uid;
-    const docRef = doc(db, "Users", uid);
-    const docSnap = await getDoc(docRef);
-    if (req.body.password === docSnap.data().password) {
-      console.log(`Successfully fetched user data`);
-    res.status(200).json(uid);
-    }
-    else {
-      res.status(400).json({message:'wrong email or password'})
-    }
-  } catch (error) {
-    console.log("Error fetching user data:", error);
-    res.status(404).json({ message: "No user found" });
-  }
-};
+// const loginUser = async (req, res) => {
+//   try {
+//     const receivedToken = req.body.token; // Adjust based on how you send the token
+//     if (receivedToken === null) throw new Error("error");
+//     const uid = await verifyToken(receivedToken);
+//     const docRef = doc(db, "Users", uid);
+//     const docSnap = await getDoc(docRef);
+//     if (req.body.password === docSnap.data().password) {
+//       console.log(`Successfully fetched user data`);
+//     res.status(200).json(uid);
+//     }
+//     else {
+//       res.status(400).json({message:'wrong email or password'})
+//     }
+//   } catch (error) {
+//     console.log("Error fetching user data:", error);
+//     res.status(404).json({ message: "No user found" });
+//   }
+// };
 
-const logOutUser=async(req,res)=>{
-  localStorage.setItem('token','')
-}
+// const logOutUser=async(req,res)=>{
+//   localStorage.setItem('token','')
+// }
 
 const getUser = async (req, res) => {
   try {
-    const uid = req.body.uid;
-    const userRecord = await getAuth().getUser(req.body.uid);
-    const docRef = doc(db, "Users", req.body.uid);
+    const receivedToken = req.query.token; 
+    console.log('token=',receivedToken)
+    if (receivedToken === null) throw new Error("error");
+    const uid = await verifyToken(receivedToken);
+    console.log(uid)
+    const userRecord = await getAuth().getUser(uid);
+    const docRef = doc(db, "Users", uid);
     const docSnap = await getDoc(docRef);
     res.status(200).json({...docSnap.data(),email:userRecord.email,uid})
 
@@ -152,8 +163,11 @@ const updateUser = async (req, res) => {
 // };
 
 const createNotif = async (req, res) => {
-    try {
-      const userRef = collection(db, "Users", req.body.uid, `/Notifs`);
+  try {
+      const receivedToken = req.body.token;
+      if (receivedToken === null) throw new Error("error");
+      const uid = await verifyToken(receivedToken);
+      const userRef = collection(db, "Users", uid, `/Notifs`);
       const docRef = await addDoc(userRef, {
         type: req.body.type,
         message: req.body.message,
@@ -167,7 +181,11 @@ const createNotif = async (req, res) => {
 
 const getNotifs = async (req, res) => {
   try {
-    const userRef = collection(db, "Users", req.body.uid, "Notifs");
+const receivedToken = req.query.token;
+console.log("token=", receivedToken);
+if (receivedToken === null) throw new Error("error");
+const uid = await verifyToken(receivedToken);
+    const userRef = collection(db, "Users", uid, "Notifs");
     const date = new Date(req.body.date);
     const startTime = new Date(date.setHours(0, 0, 0, 0));
     const endTime = new Date(date.setHours(23, 59, 59, 999));
@@ -196,7 +214,10 @@ const getNotifs = async (req, res) => {
 
 const createActivity = async (req, res) => {
   try {
-    const userRef = collection(db, "Users",req.body.uid,`/${req.body.type}`);
+    const receivedToken = req.body.token;
+    if (receivedToken === null) throw new Error("error");
+    const uid = await verifyToken(receivedToken);
+    const userRef = collection(db, "Users",uid,`/${req.body.type}`);
     const docRef = await addDoc(userRef, {
       val: req.body.val,
       timeStamp:serverTimestamp()
@@ -209,7 +230,11 @@ const createActivity = async (req, res) => {
 
 const getActivities = async (req, res) => {
   try {
-    const userRef = collection(db, "Users", req.body.uid, req.body.type);
+    const receivedToken = req.query.token;
+    console.log("token=", receivedToken);
+    if (receivedToken === null) throw new Error("error");
+    const uid = await verifyToken(receivedToken);
+    const userRef = collection(db, "Users",uid, req.body.type);
     const date = new Date(req.body.date)
     const startTime = new Date(date.setHours(0, 0, 0, 0))
     const endTime = new Date(date.setHours(23, 59, 59, 999));
@@ -234,22 +259,22 @@ const getActivities = async (req, res) => {
   }
 };
 
-const verifyUser = async (req, res) => {
-  try {
-    const uid = req.body.token;
-    const userRecord = await getAuth().getUser(uid);
-    const docRef = doc(db, "Users", uid);
-    const docSnap = await getDoc(docRef);
-    res.status(200).json({ ...docSnap.data(), email: userRecord.email, uid });
-  } catch (error) {
-    console.log("Error fetching user data:", error);
-    res.status(404).json({ msg: "false" });
-  }
-}
+// const verifyUser = async (req, res) => {
+//   try {
+//     const uid = req.body.token;
+//     const userRecord = await getAuth().getUser(uid);
+//     const docRef = doc(db, "Users", uid);
+//     const docSnap = await getDoc(docRef);
+//     res.status(200).json({ ...docSnap.data(), email: userRecord.email, uid });
+//   } catch (error) {
+//     console.log("Error fetching user data:", error);
+//     res.status(404).json({ msg: "false" });
+//   }
+// }
 
 router.route("/user/new").post(createUser);
-router.route("/user/login").post(loginUser);
-router.route('/user/verify').post(verifyUser);
+// router.route("/user/login").post(loginUser);
+// router.route('/user/verify').post(verifyUser);
 router.route("/user/").get(getUser).put(updateUser)//.delete(deleteUser);
 router.route("/notifs").post(createNotif).get(getNotifs);
 router.route("/activities").get(getActivities).post(createActivity);
