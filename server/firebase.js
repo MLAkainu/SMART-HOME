@@ -225,11 +225,10 @@ const createActivity = async (req, res) => {
 const getActivities = async (req, res) => {
   try {
     const receivedToken = req.query.token;
-    console.log("token=", receivedToken);
     if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
-    const userRef = collection(db, "Users", uid, req.body.type);
-    const date = new Date(req.body.date);
+    const userRef = collection(db, "Users", uid, req.query.type);
+    const date = new Date(req.query.date);
     const startTime = new Date(date.setHours(0, 0, 0, 0));
     const endTime = new Date(date.setHours(23, 59, 59, 999));
     const q = query(
@@ -238,10 +237,10 @@ const getActivities = async (req, res) => {
       where("timeStamp", "<=", endTime)
     );
     const querySnapShot = await getDocs(q);
-    const acts = new Array(24).fill(null);
+    var acts = new Array(24).fill(null);
     querySnapShot.forEach((act) => {
       let time = act.data().timeStamp.toDate().getHours();
-      acts[time] = act.data.val;
+      acts[time] = act.data().val;
     });
     res.send(acts);
   } catch (err) {

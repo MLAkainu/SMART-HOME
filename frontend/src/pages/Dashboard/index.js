@@ -109,15 +109,17 @@ function Dashboard({token}) {
 
 
     // kiểm tra quá ngưỡng
+
+
     async function errorTemper(temper) {
         console.log(temper)
         if (temper < 15 || temper > 50) {
             // showToastTemper();
             let message = {
-                content: "Nhiệt độ vượt quá ngưỡng cho phép!",
+                message: "Nhiệt độ vượt quá ngưỡng cho phép!",
                 type: "3",
             }
-            await putmessage(message, user.data.id)
+            await putmessage(message, token)
         }
     }
 
@@ -126,10 +128,10 @@ function Dashboard({token}) {
         if (humi < 20 || humi > 80) {
             // showToastHumi();
             let message = {
-                content: "Độ ẩm vượt quá ngưỡng cho phép!",
+                message: "Độ ẩm vượt quá ngưỡng cho phép!",
                 type: "3",
             }
-            await putmessage(message, user.data.id)
+            await putmessage(message, token)
         }
     }
 
@@ -150,6 +152,9 @@ function Dashboard({token}) {
     const [humid, setHumid] = useState();
     const [lux, setLux] = useState();
 
+    useEffect(() => {
+        errorTemper(tempers);
+    },[tempers])
 
     useEffect(() => {
         const intervalId = setInterval(async () => {

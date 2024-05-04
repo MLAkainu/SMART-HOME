@@ -178,9 +178,9 @@ export const changepass = async (uid, changepass, dispatch, id) => {
         alert("Change Password Failed")
     }
 }
-export const putmessage = async (message,uid,mtype,val) => {
+export const putmessage = async (message,token) => {
     try {
-        await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/noty/push`, {uid,message,val,mtype}, {
+        await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/api/notifs`, {token,message:message.message,type:message.type}, {
             withCredentials: true
         })
     } catch (err) {
@@ -221,11 +221,18 @@ export const writeDoor = async (val) => {
   }
 };
 
-export const getmessage = async (uid, id) => {
+export const getmessage = async (token,date) => {
     try {
-        const data = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/noty/get?id=${id}`, {
-            withCredentials: true
-        })
+        const data = await axios.get(
+          `${process.env.REACT_APP_API_ENDPOINT}/api/notifs`,date,
+          {
+              withCredentials: true,
+            params: {
+              token,
+            },
+          }
+        );
+
         return data.data
     } catch (err) {
         console.log(err)
@@ -235,7 +242,7 @@ export const getmessage = async (uid, id) => {
 export const getlight = async (token, date) => {
     try {
         let light = await axios.get(
-          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/lux`,
+          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/lux`,date,
           {
             responseType: "json",
             withCredentials: true,
@@ -254,7 +261,7 @@ export const getlight = async (token, date) => {
 export const gettemper = async (token, date) => {
     try {
         let temper = await axios.get(
-          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/temp`,
+          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/temp`,date,
           {
             responseType: "json",
             withCredentials: true,
@@ -272,15 +279,20 @@ export const gettemper = async (token, date) => {
 }
 export const gethumid = async (token, date) => {
     try {
+
         let humid = await axios.get(
-          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/humid`,
+            `${process.env.REACT_APP_API_ENDPOINT}/api/activities`,
           {
             responseType: "json",
+            withCredentials: true,
             params: {
-              token,
+                token,
+                date,
+                type:"humid"
             },
           }
         );
+        console.log('humid=',humid.data)
         return humid.data
     }
     catch (err) {

@@ -52,10 +52,10 @@ function TemperHumi({token}) {
         if (temper < 15 || temper > 50) {
             showToastTemper()
             let message = {
-                content: "Nhiệt độ quá ngưỡng",
+                message: "Nhiệt độ quá ngưỡng",
                 type: "3"
             }
-            await putmessage(message, user.data.id)
+            await putmessage(message, token)
             console.log("Check Temp", temper)
         }
     }
@@ -65,10 +65,10 @@ function TemperHumi({token}) {
         if (humi < 20 || humi > 80) {
             showToastHumi()
             let message = {
-                content: "Độ ẩm quá ngưỡng",
+                message: "Độ ẩm quá ngưỡng",
                 type: "3"
             }
-            await putmessage(message, user.data.id)
+            await putmessage(message, token)
             console.log("Check Humi", humi)
         }
     }
@@ -158,6 +158,14 @@ function TemperHumi({token}) {
     var data1 = ['37', '38', '39', '36', '35', '38', '32', '0']
     var data2 = ['50', '51', '52', '53', '54', '55', '56', '0']
 
+    let data;
+    const fdata = async () => {
+        data = await gethumid(token, "2024-05-01")
+        console.log(data)
+    }
+    useEffect(() => {
+        fdata()
+    },[])
     // add value vao data
     // if (tempers.length > 0) {
     //     for (var i = 0; i <= 23; i++) {
