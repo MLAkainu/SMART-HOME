@@ -182,7 +182,7 @@ const getNotifs = async (req, res) => {
     if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
     const userRef = collection(db, "Users", uid, "/Notifs");
-    const date = new Date(req.body.date);
+    const date = new Date(req.query.date);
     const startTime = new Date(date.setHours(0, 0, 0, 0));
     const endTime = new Date(date.setHours(23, 59, 59, 999));
     const q = query(

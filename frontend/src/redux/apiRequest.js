@@ -224,11 +224,12 @@ export const writeDoor = async (val) => {
 export const getmessage = async (token,date) => {
     try {
         const data = await axios.get(
-          `${process.env.REACT_APP_API_ENDPOINT}/api/notifs`,date,
+          `${process.env.REACT_APP_API_ENDPOINT}/api/notifs`,
           {
               withCredentials: true,
             params: {
-              token,
+                token,
+                date
             },
           }
         );
