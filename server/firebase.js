@@ -54,12 +54,10 @@ const verifyToken = async (idToken) => {
   }
 };
 
-
 const createUser = async (req, res) => {
   try {
-    const receivedToken = req.body.token; 
-    if (receivedToken === null)
-      throw new Error('error')
+    const receivedToken = req.body.token;
+    if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
     await setDoc(doc(db, "Users", uid), {
       lname: req.body.lname,
@@ -67,10 +65,10 @@ const createUser = async (req, res) => {
       phoneNo: req.body.phoneNo,
       avatar: null,
     });
-    res.status(200).json({msg:'user created'})
+    res.status(200).json({ msg: "user created" });
   } catch (error) {
     console.log("Error creating new user:", error);
-    res.status(400).json({msg:"error"});
+    res.status(400).json({ msg: "error" });
   }
 };
 
@@ -100,19 +98,18 @@ const createUser = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const receivedToken = req.query.token; 
-    console.log('token=',receivedToken)
+    const receivedToken = req.query.token;
+    console.log("token=", receivedToken);
     if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
-    console.log(uid)
+    console.log(uid);
     const userRecord = await getAuth().getUser(uid);
     const docRef = doc(db, "Users", uid);
     const docSnap = await getDoc(docRef);
-    res.status(200).json({...docSnap.data(),email:userRecord.email,uid})
-
+    res.status(200).json({ ...docSnap.data(), email: userRecord.email, uid });
   } catch (error) {
     console.log("Error fetching user data:", error);
-      res.status(404).json({ message: "No user found" });
+    res.status(404).json({ message: "No user found" });
   }
 };
 
@@ -120,18 +117,17 @@ const updateUser = async (req, res) => {
   try {
     const userRecord = await getAuth().updateUser(req.body.uid, {
       email: req.body.email,
-      password:req.body.password,
-    })
+      password: req.body.password,
+    });
     const user = req.body;
     delete user.uid;
     delete user.email;
-    
-    await updateDoc(doc(db, "Users", userRecord.uid),user)
+
+    await updateDoc(doc(db, "Users", userRecord.uid), user);
     res.status(200).json({ mgs: "user upated" });
-  }
-  catch (error) {
+  } catch (error) {
     console.log("Error updating user:", error);
-    res.json({message:'cant update user'})
+    res.json({ message: "cant update user" });
   }
 };
 
@@ -164,46 +160,44 @@ const updateUser = async (req, res) => {
 
 const createNotif = async (req, res) => {
   try {
-      const receivedToken = req.body.token;
-      if (receivedToken === null) throw new Error("error");
-      const uid = await verifyToken(receivedToken);
-      const userRef = collection(db, "Users", uid, `/Notifs`);
-      const docRef = await addDoc(userRef, {
-        type: req.body.type,
-        message: req.body.message,
-        timeStamp: serverTimestamp(),
-      });
-      res.status(200).json({ message: "notif created" });
-    } catch (err) {
-      console.log(err);
-    }
+    const receivedToken = req.body.token;
+    if (receivedToken === null) throw new Error("error");
+    const uid = await verifyToken(receivedToken);
+    const userRef = collection(db, "Users", uid, `/Notifs`);
+    const docRef = await addDoc(userRef, {
+      type: req.body.type,
+      message: req.body.message,
+      timeStamp: serverTimestamp(),
+    });
+    res.status(200).json({ message: "notif created" });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const getNotifs = async (req, res) => {
   try {
-const receivedToken = req.query.token;
-console.log("token=", receivedToken);
-if (receivedToken === null) throw new Error("error");
-const uid = await verifyToken(receivedToken);
-    const userRef = collection(db, "Users", uid, "Notifs");
+    const receivedToken = req.query.token;
+    console.log("token=", receivedToken);
+    if (receivedToken === null) throw new Error("error");
+    const uid = await verifyToken(receivedToken);
+    const userRef = collection(db, "Users", uid, "/Notifs");
     const date = new Date(req.body.date);
     const startTime = new Date(date.setHours(0, 0, 0, 0));
     const endTime = new Date(date.setHours(23, 59, 59, 999));
-    console.log(startTime);
-    console.log(endTime);
     const q = query(
       userRef,
       where("timeStamp", ">=", startTime),
       where("timeStamp", "<=", endTime)
     );
     const querySnapShot = await getDocs(q);
-    const acts = [];
+    const acts = []
     querySnapShot.forEach((act) => {
       acts.push({
-        type: act.data().type,
         message: act.data().message,
-        timeStamp: act.data().timeStamp.toDate(),
-      });
+        type: act.data().type,
+        timeStamp:act.data().timeStamp.toDate()
+      })
     });
     res.send(acts);
   } catch (err) {
@@ -217,12 +211,12 @@ const createActivity = async (req, res) => {
     const receivedToken = req.body.token;
     if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
-    const userRef = collection(db, "Users",uid,`/${req.body.type}`);
+    const userRef = collection(db, "Users", uid, `/${req.body.type}`);
     const docRef = await addDoc(userRef, {
       val: req.body.val,
-      timeStamp:serverTimestamp()
-    })
-    res.status(200).json({message:"activity recorded"})
+      timeStamp: serverTimestamp(),
+    });
+    res.status(200).json({ message: "activity recorded" });
   } catch (err) {
     console.log(err);
   }
@@ -234,27 +228,24 @@ const getActivities = async (req, res) => {
     console.log("token=", receivedToken);
     if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
-    const userRef = collection(db, "Users",uid, req.body.type);
-    const date = new Date(req.body.date)
-    const startTime = new Date(date.setHours(0, 0, 0, 0))
+    const userRef = collection(db, "Users", uid, req.body.type);
+    const date = new Date(req.body.date);
+    const startTime = new Date(date.setHours(0, 0, 0, 0));
     const endTime = new Date(date.setHours(23, 59, 59, 999));
-    console.log(startTime)
-    console.log(endTime)
-    const q = query(userRef, where("timeStamp", ">=", startTime), where("timeStamp", "<=", endTime));
+    const q = query(
+      userRef,
+      where("timeStamp", ">=", startTime),
+      where("timeStamp", "<=", endTime)
+    );
     const querySnapShot = await getDocs(q);
-    const acts = []
-    querySnapShot.forEach(act => {
-      acts.push(act.data().val)//{
-        //val:act.data().val,
-       // timeStamp: act.data().timeStamp.toDate(),
-      //}
-      //);
-
-    })
-    res.send(acts)
-    
+    const acts = new Array(24).fill(null);
+    querySnapShot.forEach((act) => {
+      let time = act.data().timeStamp.toDate().getHours();
+      acts[time] = act.data.val;
+    });
+    res.send(acts);
   } catch (err) {
-    res.status(400).json({message:"can not get activities"})
+    res.status(400).json({ message: "can not get activities" });
     console.log(err);
   }
 };
@@ -275,7 +266,7 @@ const getActivities = async (req, res) => {
 router.route("/user/new").post(createUser);
 // router.route("/user/login").post(loginUser);
 // router.route('/user/verify').post(verifyUser);
-router.route("/user/").get(getUser).put(updateUser)//.delete(deleteUser);
+router.route("/user/").get(getUser).put(updateUser); //.delete(deleteUser);
 router.route("/notifs").post(createNotif).get(getNotifs);
 router.route("/activities").get(getActivities).post(createActivity);
 
