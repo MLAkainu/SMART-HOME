@@ -33,6 +33,7 @@ function Login({setUser,auth}) {
         }
         catch (err) {
             console.log(err)
+            window.alert('Wrong email or password')
         }
         
         // navigate('/dashboard');

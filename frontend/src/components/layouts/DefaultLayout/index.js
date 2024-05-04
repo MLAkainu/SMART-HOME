@@ -212,8 +212,8 @@ function DefaultLayout({auth,user}) {
                       <Link to="/user">
                         {/* <img className="navbar__account-img" src={user.data.avatar=="None"?avt:user.data.avatar} /> */}
 
-                        {/* <img className="navbar__account-img" src={props.user.avatar==null?avt:props.user.avatar
-                            } /> */}
+                        <img className="navbar__account-img" src={user.avatar==null?avt:user.avatar
+                            } />
                       </Link>
                     </div>
                   </nav>

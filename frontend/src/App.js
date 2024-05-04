@@ -17,7 +17,7 @@ import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
 import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
+import  "firebase/compat/auth";
 
 const API_KEY = "AIzaSyDkg6T_z2SyvQxU2BIv1bJcfddlhEGqNR4";
 const AUTH_DOMAIN = "smart-home-1dabb.firebaseapp.com";
@@ -82,7 +82,7 @@ setUserinfo(data);
       }
     });
   }, []);
-  console.log('user=',userinfo);
+  
   // auth.signOut();
   // setIsAuth(false)
   return isAuth ? (
@@ -93,7 +93,7 @@ setUserinfo(data);
           <Route path="/light" element={<Light token={token} />} />
           <Route path="/temperhumi" element={<TemperHumi token={token} />} />
           <Route path="/notification" element={<Notification />} />
-          <Route path="/user" element={<User user={userinfo} />} />
+          <Route path="/user" element={<User user={userinfo} auth={auth} firebase={firebase} />} />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
