@@ -155,17 +155,45 @@ function TemperHumi({token}) {
     // var colorTemper = clockTemper < 15 || clockTemper > 50 ? "#ff6384" : '#3ecdef';
     // var colorHumi = clockHumi < 20 || clockHumi > 80 ? "#ff6384" : '#3ecdef';
 
-    var data1 = ['37', '38', '39', '36', '35', '38', '32', '0']
+    // var data1 = ['37', '38', '39', '36', '35', '38', '32', '0']
     var data2 = ['50', '51', '52', '53', '54', '55', '56', '0']
+
+    const [test, setTest] = useState([])
+
+
 
     let data;
     const fdata = async () => {
         data = await gethumid(token, "2024-05-01")
-        console.log(data)
+        console.log(data[0])
+        let temp = []
+        for (var i = 0; i < 23; i++) {
+            if (data[i] == null) {
+                temp.push('0')
+            }
+            else {
+                temp.push(data[i].toString() )
+            }
+            
+
+        }
+
+
+        setTest(temp)
+
     }
     useEffect(() => {
         fdata()
     },[])
+
+
+
+    console.log("T", test)
+
+    console.log(data)
+
+    var data1 = test
+
     // add value vao data
     // if (tempers.length > 0) {
     //     for (var i = 0; i <= 23; i++) {
