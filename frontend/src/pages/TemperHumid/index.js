@@ -84,6 +84,8 @@ function TemperHumi({token}) {
     const [filter, setFilter] = useState(0);
     const [selectdate, setSelectdate] = useState(new Date());
 
+    
+
     useEffect(() => {
         const intervalId = setInterval(async () => {
             try {
@@ -167,7 +169,7 @@ function TemperHumi({token}) {
         data = await gethumid(token, "2024-05-01")
         console.log(data[0])
         let temp = []
-        for (var i = 0; i < 23; i++) {
+        for (var i = 0; i <= 23; i++) {
             if (data[i] == null) {
                 temp.push('0')
             }
@@ -190,8 +192,6 @@ function TemperHumi({token}) {
 
     console.log("T", test)
 
-    console.log(data)
-
     var data1 = test
 
     // add value vao data
@@ -205,6 +205,42 @@ function TemperHumi({token}) {
     //         data2.push(humis[i].value);
     //     }
     // }
+
+    console.log("Select Date", selectdate)
+
+    let hu; 
+    const handlefilter = async () => {
+        // let date = new Date(selectdate)
+        // let year = date.getFullYear()
+        //  let month = date.getMonth() + 1
+        // let day = date.getDate()
+        //  let temp = `${year}${month}${day}`
+
+        hu = await gethumid(token, selectdate)
+        console.log(hu[0])
+        let temp = []
+        for (var i = 0; i <= 23; i++) {
+            if (hu[i] == null) {
+                temp.push('0')
+            }
+            else {
+                temp.push(hu[i].toString() )
+            }
+            
+            
+
+        }
+        setTest(temp)
+
+        console.log("Result1", selectdate)
+        console.log("Result2", temp)
+        
+
+
+
+
+
+    }
 
     // const handlefilter = async () => {
     //     let date = new Date(selectdate)
@@ -288,13 +324,13 @@ function TemperHumi({token}) {
                 {/* Same as */}
 
                 <div className='filter'>
-                    {/* <h2 className='filter'>Filter </h2> */}
+                    
                     {/* <input className='filter__input' type="date" onChange={(e) => { setSelectdate(e.target.value) }} /> */}
-                    <input className='filter__input' type="date"  />
-                    {/* <button className='filter__btn' onClick={handlefilter}> */}
-                    <button className='filter__btn' >
-                        <i className="filter__icon fa-solid fa-filter"></i>
+                    <input className='filter__input' type="date" onChange={(e) => { setSelectdate(e.target.value) }} />
+                    <button className='filter__btn' onClick={handlefilter}>
+                        <i className="filter__icon fa-solid fa-filter">A</i> 
                     </button>
+                    
 
                 </div>
             </div>
