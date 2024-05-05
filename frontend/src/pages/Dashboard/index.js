@@ -11,7 +11,7 @@ import { FaFan } from "react-icons/fa";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa";
 
-import { updatetemperhumid, putmessage,updateai, getlight, writeLight, writeFan, writeDoor } from '../../redux/apiRequest';
+import { updatetemperhumid, putmessage,updateai, getlight, writeLight, writeFan, writeDoor, writeData, updatelux } from '../../redux/apiRequest';
 
 import "./Dashboard.css";
 import 'react-toastify/dist/ReactToastify.css';
@@ -153,6 +153,24 @@ function Dashboard({token}) {
     const [lux, setLux] = useState();
 
     useEffect(() => {
+      const postData = async () => {
+        try {
+         await writeData(token,"humid",humid)
+          await  writeData(token, "temp", tempers)
+           await writeData(token,"lux",lux)
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      postData();
+        const interval = setInterval(() => {
+            postData();
+        },36000000);
+
+      return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
         errorTemper(tempers);
     },[tempers])
 
@@ -165,7 +183,7 @@ function Dashboard({token}) {
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
                 let latest = await updatetemperhumid(token, dispatch, temp);
-                let light = await getlight(token);
+                let light = await updatelux(token,dispatch,temp);
                 setTemper(latest.temp);
                 setHumid(latest.humid);
                 setLux(light);

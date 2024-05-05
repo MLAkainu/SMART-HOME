@@ -52,14 +52,19 @@ export const logout = async (dispatch, navigate) => {
         dispatch(logoutFailed())
     }
 }
-export const updatelight = async (uid, dispatch, date) => {
+export const updatelux = async (token, dispatch, date) => {
     dispatch(updatelightStart())
     try {
-        let light = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/lux`, {
-            responseType: 'json',
+        let light = await axios.get(
+          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/lux`,
+          {
+            responseType: "json",
             withCredentials: true,
-            uid
-        })
+            params: {
+              token,
+            },
+          }
+        );
         return light.data
         // const res = {
         //     light: light.data.message.payload
@@ -302,3 +307,19 @@ export const gethumid = async (token, date) => {
     }
 }
 
+export const writeData = async (token, type,val) => {
+  try {
+    let humid = await axios.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/api/activities`,{token,type,val},
+      {
+        responseType: "json",
+        withCredentials: true,
+      }
+    );
+    console.log("humid=", humid.data);
+    return humid.data;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
