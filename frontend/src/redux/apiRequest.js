@@ -226,15 +226,14 @@ export const writeDoor = async (val) => {
   }
 };
 
-export const getmessage = async (token,date) => {
+export const getmessage = async (token) => {
     try {
         const data = await axios.get(
           `${process.env.REACT_APP_API_ENDPOINT}/api/notifs`,
           {
               withCredentials: true,
             params: {
-                token,
-                date
+                token
             },
           }
         );

@@ -178,19 +178,10 @@ const createNotif = async (req, res) => {
 const getNotifs = async (req, res) => {
   try {
     const receivedToken = req.query.token;
-    console.log("token=", receivedToken);
     if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
     const userRef = collection(db, "Users", uid, "/Notifs");
-    const date = new Date(req.query.date);
-    const startTime = new Date(date.setHours(0, 0, 0, 0));
-    const endTime = new Date(date.setHours(23, 59, 59, 999));
-    const q = query(
-      userRef,
-      where("timeStamp", ">=", startTime),
-      where("timeStamp", "<=", endTime)
-    );
-    const querySnapShot = await getDocs(q);
+    const querySnapShot = await getDocs(userRef);
     const acts = []
     querySnapShot.forEach((act) => {
       acts.push({
