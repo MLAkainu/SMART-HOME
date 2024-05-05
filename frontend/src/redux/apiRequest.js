@@ -247,45 +247,52 @@ export const getmessage = async (token,date) => {
 
 export const getlight = async (token, date) => {
     try {
-        let light = await axios.get(
-          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/lux`,date,
-          {
-            responseType: "json",
-            withCredentials: true,
-            params: {
-              token
-            },
-          }
-        );
-        return light.data
-    }
-    catch (err) {
-        console.log(err)
-        return []
-    }
+
+      let lux = await axios.get(
+          `${process.env.REACT_APP_API_ENDPOINT}/api/activities`,
+        {
+          responseType: "json",
+          withCredentials: true,
+          params: {
+              token,
+              date,
+              type:"lux"
+          },
+        }
+      );
+      console.log('lux=',lux.data)
+      return lux.data
+  }
+  catch (err) {
+      console.log(err)
+      return []
+  }
 }
 export const gettemper = async (token, date) => {
     try {
-        let temper = await axios.get(
-          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/temp`,date,
-          {
-            responseType: "json",
-            withCredentials: true,
-            params: {
+
+      let temp = await axios.get(
+          `${process.env.REACT_APP_API_ENDPOINT}/api/activities`,
+        {
+          responseType: "json",
+          withCredentials: true,
+          params: {
               token,
-            },
-          }
-        );
-        return temper.data
-    }
-    catch (err) {
-        console.log(err)
-        return []
-    }
+              date,
+              type:"temp"
+          },
+        }
+      );
+      console.log('temp=',temp.data)
+      return temp.data
+  }
+  catch (err) {
+      console.log(err)
+      return []
+  }
 }
 export const gethumid = async (token, date) => {
     try {
-
         let humid = await axios.get(
             `${process.env.REACT_APP_API_ENDPOINT}/api/activities`,
           {

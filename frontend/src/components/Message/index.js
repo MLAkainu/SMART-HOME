@@ -1,6 +1,9 @@
 import "./Message.css"
-
-
+import { FaCheckCircle } from "react-icons/fa";
+import { IoInformationCircleSharp } from "react-icons/io5";
+import { FaExclamationTriangle } from "react-icons/fa";
+import { FaRegTimesCircle } from "react-icons/fa";
+import { MdOutlineThumbUp } from "react-icons/md";
 
 function Message(props) {
     if (props.type == '1')
@@ -13,7 +16,7 @@ function Message(props) {
                                 <div className="alert-time">
                                     {String(props.time)}
                                 </div>
-                                <i className="start-icon far fa-check-circle faa-tada animated"></i>
+                                <i className="start-icon far fa-check-circle faa-tada animated"><FaCheckCircle /></i>
                                 <strong className="font__weight-semibold">Well done!</strong> {props.message}
                             </div>
                         </div>
@@ -30,7 +33,7 @@ function Message(props) {
                                 <div className="alert-time">
                                     {String(props.time)}
                                 </div>
-                                <i className="start-icon  fa fa-info-circle faa-shake animated"></i>
+                                <i className="start-icon  fa fa-info-circle faa-shake animated"><IoInformationCircleSharp /></i>
                                 <strong className="font__weight-semibold">Heads up!</strong> {props.message}
                             </div>
                         </div>
@@ -47,7 +50,7 @@ function Message(props) {
                                 <div className="alert-time">
                                     {String(props.time)}
                                 </div>
-                                <i className="start-icon fa fa-exclamation-triangle faa-flash animated"></i>
+                                <i className="start-icon fa fa-exclamation-triangle faa-flash animated"><FaExclamationTriangle /></i>
                                 <strong className="font__weight-semibold">Warning!</strong> {props.message}
                             </div>
                         </div>
@@ -65,7 +68,7 @@ function Message(props) {
                                 <div className="alert-time">
                                     {String(props.time)}
                                 </div>
-                                <i className="start-icon far fa-times-circle faa-pulse animated"></i>
+                                <i className="start-icon far fa-times-circle faa-pulse animated"><FaRegTimesCircle /></i>
                                 <strong className="font__weight-semibold">Oh snap!</strong> {props.message}
                             </div>
                         </div>
@@ -83,7 +86,7 @@ function Message(props) {
                                 <div className="alert-time">
                                     {String(props.time)}
                                 </div>
-                                <i className="start-icon fa fa-thumbs-up faa-bounce animated"></i>
+                                <i className="start-icon fa fa-thumbs-up faa-bounce animated"><MdOutlineThumbUp /></i>
                                 <strong className="font__weight-semibold">Well done!</strong> {props.message}
                             </div>
                         </div>

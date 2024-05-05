@@ -5,6 +5,7 @@ import TemperatureChart from "../../components/chart/TemperatureChart";
 import "./TemperHumi.css"
 import { useSelector, useDispatch } from "react-redux"
 import { updatetemperhumid, gettemper, gethumid, putmessage } from '../../redux/apiRequest';
+import { FaFilter } from "react-icons/fa";
 // Import react-circular-progressbar module and styles
 import {
     CircularProgressbar,
@@ -119,6 +120,11 @@ function TemperHumi({token}) {
 
     }, []);
 
+    useEffect(() => {
+        errorTemper(tempers);
+        errorHumi(humid);
+    },[tempers,humid])
+
 
     // useEffect(() => {
     //     const intervalId = setInterval(async () => {
@@ -158,7 +164,7 @@ function TemperHumi({token}) {
     // var colorHumi = clockHumi < 20 || clockHumi > 80 ? "#ff6384" : '#3ecdef';
 
     // var data1 = ['37', '38', '39', '36', '35', '38', '32', '0']
-    var data2 = ['50', '51', '52', '53', '54', '55', '56', '0']
+    // var data2 = ['50', '51', '52', '53', '54', '55', '56', '0']
 
     const [test, setTest] = useState([])
 
@@ -208,7 +214,8 @@ function TemperHumi({token}) {
 
     console.log("Select Date", selectdate)
 
-    let hu; 
+    let hu
+    let te
     const handlefilter = async () => {
         // let date = new Date(selectdate)
         // let year = date.getFullYear()
@@ -217,8 +224,11 @@ function TemperHumi({token}) {
         //  let temp = `${year}${month}${day}`
 
         hu = await gethumid(token, selectdate)
+        te = await gettemper(token, selectdate)
         console.log(hu[0])
+        console.log(te[0])
         let temp = []
+        let temp_ = []
         for (var i = 0; i <= 23; i++) {
             if (hu[i] == null) {
                 temp.push('0')
@@ -226,11 +236,18 @@ function TemperHumi({token}) {
             else {
                 temp.push(hu[i].toString() )
             }
+            if (te[i] == null) {
+                temp_.push('0')
+            }
+            else {
+                temp_.push(te[i].toString() )
+            }
             
             
 
         }
-        setTest(temp)
+        setHumis(temp)
+        setTempers(temp_)
 
         console.log("Result1", selectdate)
         console.log("Result2", temp)
@@ -241,6 +258,9 @@ function TemperHumi({token}) {
 
 
     }
+
+    console.log("ResultH", humis)
+    console.log("ResultT", tempers)
 
     // const handlefilter = async () => {
     //     let date = new Date(selectdate)
@@ -267,7 +287,7 @@ function TemperHumi({token}) {
                     |
                 </div>
                 <div className='temperHumi__left-chart'>
-                    <TemperatureChart data1={data1} data2={data2} />
+                    <TemperatureChart data1={humis} data2={tempers} />
                 </div>
 
             </div>
@@ -328,7 +348,7 @@ function TemperHumi({token}) {
                     {/* <input className='filter__input' type="date" onChange={(e) => { setSelectdate(e.target.value) }} /> */}
                     <input className='filter__input' type="date" onChange={(e) => { setSelectdate(e.target.value) }} />
                     <button className='filter__btn' onClick={handlefilter}>
-                        <i className="filter__icon fa-solid fa-filter">A</i> 
+                        <i className="filter__icon fa-solid fa-filter"><FaFilter /></i> 
                     </button>
                     
 

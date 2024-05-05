@@ -4,17 +4,9 @@ import { getmessage } from "../../redux/apiRequest"
 import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 
-function Notification() { 
+function Notification({token}) { 
     // const [mes, setMes] = useState([]);
-    const user = {
-        data: {
-            id: 1,
-            firstname: "Nguyễn",
-            lastname: "Văn A",
-            phonenumber: "0123456789",
-            username: "nguyenvana",
-        }
-    }
+    
     // useEffect(() => {
     //     const getmess = async () => {
     //         const message = await getmessage(user.data.id)
@@ -23,33 +15,34 @@ function Notification() {
     //     getmess()
     // }, [])
 
-    var mes = []
+    const [mes, setMes] = useState([]);
+    useEffect(() => {
+        const getmess = async () => {
+            // let date = new Date()
+            var date = new Date()
+            var year = date.getFullYear()
+            var month = date.getMonth() + 1
+            var dt = date.getDate()
 
-    mes = [{
-        content: "Cửa đã được mở",
-        date: "2024-10-10",
-        type: "1"
-    }, {
-        content: "Đèn đã được bật",
-        date: "2024-10-10",
-        type: "2"
-    }, {
-        content: "Quạt đã được bật",
-        date: "2024-10-10",
-        type: "3"
-    } ,
+            var date = year + '-' + (month < 10 ? '0' : '') + month + '-' + (dt < 10 ? '0' : '') + dt
 
-    { content: "Cửa đã được mở",
-    date: "2024-10-10",
-    type: "4"
-    }, 
-    { content: "Cửa đã được mở",
-    date: "2024-10-10",
-    type: "5"
-    },
-    
+            console.log("Date", date)
 
-]
+
+            
+
+
+            const message = await getmessage(token, "2024-05-05")
+            for (let i = 0; i < message.length; i++) {
+                message[i].timeStamp = new Date(message[i].timeStamp).toLocaleString()
+            }
+
+            setMes(message)
+
+        }
+        getmess()
+    }, [])
+
 
     console.log("Result",mes)
     mes.reverse()
@@ -58,7 +51,8 @@ function Notification() {
             <h1 className="notification__heading">|</h1>
             <div className='notification__block'>
                 {mes && mes.map(message => 
-                    <Message message={message.content} time={message.date} type={message.type}></Message>
+                    <Message message={message.message} time={message.timeStamp
+                    } type={message.type}></Message>
                 )}
             </div>
                 

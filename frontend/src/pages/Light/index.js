@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { updatelight, getlight, putmessage } from "../../redux/apiRequest"
+import { updatelight, getlight, putmessage, updatelux } from "../../redux/apiRequest"
 import LightChart from "../../components/chart/LightChart"
 import "./Light.css"
 import { useSelector, useDispatch } from "react-redux"
+import { FaFilter } from "react-icons/fa";
 import {
     CircularProgressbar,
     buildStyles
@@ -24,7 +25,7 @@ function Light({token}) {
     const [lights, setLights] = useState([]);
     const [light, setLight] = useState(0);
     const [filter, setFilter] = useState(0);
-    const [selecdate, setSelecdate] = useState(new Date());
+    const [selecdate, setSelectdate] = useState(new Date());
     const showToastLight = () => {
         toast.error(' Ánh sáng vượt quá ngưỡng cho phép!', {
             position: "top-right",
@@ -47,7 +48,7 @@ function Light({token}) {
                 let day = date.getDate();
                 let temp = `${year}${month}${day}`;
                 
-                let light = await getlight(token);
+                let light = await updatelux(token, dispatch, temp);
                 
                 setLight(light);
                 // await errorTemper(latest.temp);
@@ -79,8 +80,14 @@ function Light({token}) {
                 content: "Ánh sáng quá ngưỡng",
                 type: "3"
             }
+            await putmessage(message, token)
+            console.log("Check Light", light)
         }
     }
+
+    useEffect(() => {
+        errorLight(light)
+    },[light])
 
     // useEffect(() => {
     //     const intervalId = setInterval(async () => {
@@ -115,13 +122,42 @@ function Light({token}) {
     console.log("light", light);
     var colorLight = "rgb(236, 241, 50)";
 
-    var data = ['50','100','150','500','250','100','350','400', '0','0'];
+    // var data = ['50','100','150','500','250','100','350','400', '0','0'];
     // lay value cho data
     // if (lights.length > 0) {
     //     for (var i = 0; i <= 23; i++) {
     //         data.push(lights[i].value);
     //     }
     // }
+
+    let li
+
+    const handlefilter = async () => {
+        
+        li = await getlight(token, selecdate);
+        console.log("li", li);
+        let temp = []
+
+        for (var i = 0; i <= 23; i++) {
+            if (li[i] == null) {
+                temp.push('0')
+            }
+            else {
+                temp.push(li[i].toString() )
+            }
+        }
+        setLights(temp);
+
+
+    }
+
+    console.log("light", lights);
+
+
+        
+    
+
+
 
 
     // const handlefilter = async () => {
@@ -143,7 +179,7 @@ function Light({token}) {
                     |
                 </div>
                 <div className='Light__left-chart'>
-                    <LightChart data={data} />
+                    <LightChart data={lights} />
                 </div>
 
             </div>
@@ -181,10 +217,10 @@ function Light({token}) {
                 </div>
                 <div className='filter'>
                     {/* <input className='filter__input' type="date" onChange={(e) => {setSelectdate(e.target.value)}} /> */}
-                    <input className='filter__input' type="date" />
+                    <input className='filter__input' type="date" onChange={(e) => {setSelectdate(e.target.value)}} />
                     {/* <button className='filter__btn' onClick={handlefilter}> */}
-                    <button className='filter__btn' >
-                        <i className="filter__icon fa-solid fa-filter"></i>
+                    <button className='filter__btn' onClick={handlefilter} >
+                        <i className="filter__icon fa-solid fa-filter"><FaFilter /></i>
                     </button>
 
                 </div>

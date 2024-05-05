@@ -92,7 +92,7 @@ setUserinfo(data);
           <Route path="/dashboard" element={<Dashboard token={token} />} />
           <Route path="/light" element={<Light token={token} />} />
           <Route path="/temperhumi" element={<TemperHumi token={token} />} />
-          <Route path="/notification" element={<Notification />} />
+          <Route path="/notification" element={<Notification token={token} />} />
           <Route path="/user" element={<User user={userinfo} auth={auth} firebase={firebase} />} />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />

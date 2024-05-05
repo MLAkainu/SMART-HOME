@@ -16,31 +16,31 @@ import { updatetemperhumid, putmessage,updateai, getlight, writeLight, writeFan,
 import "./Dashboard.css";
 import 'react-toastify/dist/ReactToastify.css';
 
-// const showToastTemper = () => {
-//     toast.error('Nhiệt độ vượt quá ngưỡng cho phép!', {
-//         position: "top-right",
-//         autoClose: 2000,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//         theme: "light",
-//     });
+const showToastTemper = () => {
+    toast.error('Nhiệt độ vượt quá ngưỡng cho phép!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
 
-// };
-// const showToastHumi = () => {
-//     toast.error(' Độ ẩm vượt quá ngưỡng cho phép!', {
-//         position: "top-right",
-//         autoClose: 2000,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//         theme: "light",
-//     });
-// };
+};
+const showToastHumi = () => {
+    toast.error(' Độ ẩm vượt quá ngưỡng cho phép!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+};
 
 function Dashboard({token}) {
 
@@ -57,35 +57,39 @@ function Dashboard({token}) {
 
     const clickLed = async () => {
         let message = {
-            content: "",
+            message: "",
             type: "1",
         }
-        if (ledBtn === 0) {
-            message.content = "Bật đèn";
+        if (ledBtn ===  false) {
+            message.message = "Bật đèn";
         }
         else {
-            message.content = "Tắt đèn";
+            message.message = "Tắt đèn";
         }
-        // await putmessage(message, user.uid)
-        setLed(!ledBtn);
+        console.log(message)
+
+        setLed(!ledBtn)
         await writeLight(!ledBtn)
+        await putmessage(message, token)
+        
     }
 
     //công tắc fan
     const [fanBtn, setFan] = useState(false);
     const clickFan = async () => {
         let message = {
-            content: "",
+            message: "",
             type: "1",
         }
-        if (fanBtn == 0) {
-            message.content = "Bật quạt";
+        if (fanBtn == false) {
+            message.message = "Bật quạt";
         }
         else {
-            message.content = "Tắt quạt";
+            message.message = "Tắt quạt";
         }
         setFan(!fanBtn);
         await writeFan(!fanBtn);
+        await putmessage(message, token)
     }
 
 
@@ -93,18 +97,19 @@ function Dashboard({token}) {
     const [doorBtn, setDoor] = useState(false);
     const clickDoor = async () => {
         let message = {
-            content: "",
+            message: "",
             type: "1",
         }
         if (doorBtn === 0) {
-            message.content = "Mở cửa";
+            message.message = "Mở cửa";
         }
         else {
-            message.content = "Đóng cửa";
+            message.message = "Đóng cửa";
         }
         setDoor(!doorBtn);
         await writeDoor(!doorBtn);
-        // await putmessage(message, user.data.uid,'DOOR',doorBtn)
+        await putmessage(message, token)
+        
     }
 
 
@@ -114,7 +119,7 @@ function Dashboard({token}) {
     async function errorTemper(temper) {
         console.log(temper)
         if (temper < 15 || temper > 50) {
-            // showToastTemper();
+            showToastTemper();
             let message = {
                 message: "Nhiệt độ vượt quá ngưỡng cho phép!",
                 type: "3",
@@ -126,7 +131,7 @@ function Dashboard({token}) {
     async function errorHumi(humi) {
         console.log(humi)
         if (humi < 20 || humi > 80) {
-            // showToastHumi();
+            showToastHumi();
             let message = {
                 message: "Độ ẩm vượt quá ngưỡng cho phép!",
                 type: "3",
@@ -158,6 +163,7 @@ function Dashboard({token}) {
          await writeData(token,"humid",humid)
           await  writeData(token, "temp", tempers)
            await writeData(token,"lux",lux)
+           
         } catch (error) {
           console.log(error);
         }
@@ -172,7 +178,8 @@ function Dashboard({token}) {
 
     useEffect(() => {
         errorTemper(tempers);
-    },[tempers])
+        errorHumi(humid);
+    },[tempers,humid])
 
     useEffect(() => {
         const intervalId = setInterval(async () => {

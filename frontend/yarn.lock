@@ -5473,6 +5473,11 @@ follow-redirects@^1.0.0, follow-redirects@^1.15.6:
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.6.tgz"
   integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
 
+font-awesome-animation@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/font-awesome-animation/-/font-awesome-animation-1.1.1.tgz#fa7e685c163034d59a22b565af1d848d3f7866b6"
+  integrity sha512-WHl4zhyb0LeqT+v2JClv5yNZ+63e2Mbbu+9ycL3FGVHtZA8zn4iaMBxA6AgcJySLlfdjuTEA0lBZBW2CE1cwpQ==
+
 for-each@^0.3.3:
   version "0.3.3"
   resolved "https://registry.npmjs.org/for-each/-/for-each-0.3.3.tgz"
