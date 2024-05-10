@@ -176,7 +176,7 @@ export const readFan = (req, res) => {
 export const readLight = (req, res) => {
   const db = getDatabase();
   // const temp = ref(db, `${req.body.uid}/light`)
-  const temp = ref(db, `SYS-1/LUX`)
+  const temp = ref(db, `SYS-1/LIGHT`)
   onValue(temp, (snapshot) => {
     const data = snapshot.val();
     res.status(200).json(data)

@@ -153,9 +153,9 @@ function Dashboard({token}) {
 
 
     //lay data
-    const [tempers, setTemper] = useState();
-    const [humid, setHumid] = useState();
-    const [lux, setLux] = useState();
+    const [tempers, setTemper] = useState(0);
+    const [humid, setHumid] = useState(0);
+    const [lux, setLux] = useState(0);
 
     useEffect(() => {
       const postData = async () => {
@@ -171,7 +171,7 @@ function Dashboard({token}) {
       postData();
         const interval = setInterval(() => {
             postData();
-        },36000000);
+        },3600000);
 
       return () => clearInterval(interval);
     }, []);
