@@ -45,11 +45,11 @@ function User({user,auth,firebase}) {
               const newInfo = {
                 firstname: firstname,
                 lastname: lastname,
-                email: updatedEmail, // Cập nhật email mới trong Firestore
+                email: updatedEmail, 
                 phone: phonenumber,
-                token:idToken
+                token:idToken,
               }
-              
+              //console.log({newInfo});
               await changeinfor(newInfo, dispatch);
               console.log("User information updated successfully in Firestore.");
           }

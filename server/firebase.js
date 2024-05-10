@@ -259,11 +259,12 @@ const changeInfo = async (req, res) => {
     const receivedToken = req.body.token;
     if (receivedToken === null) throw new Error("error");
     const uid = await verifyToken(receivedToken);
-    await updateDoc(doc(db, "User", uid), {
-      lname: req.body.lname,
-      fname: req.body.fname,
-      phoneNo: req.body.phoneNo,
-    });
+    const data = {
+      lname: req.body.lastname,
+      fname: req.body.firstname,
+      phoneNo: req.body.phone,
+    }
+    await updateDoc(doc(db, "Users", uid), data);
     res.status(200).json({msg: "info update"});
   } catch (error) {
     console.log("Error update info of user:", error);
@@ -277,5 +278,5 @@ router.route("/user/new").post(createUser);
 router.route("/user/").get(getUser).put(updateUser); //.delete(deleteUser);
 router.route("/notifs").post(createNotif).get(getNotifs);
 router.route("/activities").get(getActivities).post(createActivity);
-router.route("/user/update/info").put(changeInfo);
+router.route("/user/changeinfo").put(changeInfo);
 export default router;
