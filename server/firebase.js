@@ -254,6 +254,7 @@ const getActivities = async (req, res) => {
 // }
 
 const changeInfo = async (req, res) => {
+  
   try{
     const receivedToken = req.body.token;
     if (receivedToken === null) throw new Error("error");
