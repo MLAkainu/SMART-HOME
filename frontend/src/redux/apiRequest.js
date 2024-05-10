@@ -155,19 +155,17 @@ export const changeavatar = async (uid, new_avatar, dispatch, id) => {
         alert("Change Avatar failed")
     }
 }
-export const changeinfor = async (uid, new_infor, dispatch, id) => {
-    dispatch(changeInforStart())
-    try {
-        const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/update/info?id=${id}`, new_infor, {
-            withCredentials: true
-        })
-        console.log(new_user)
-        dispatch(changeInforSuccess(new_user.data.message))
-        alert("Change User's Information Success")
-    } catch (err) {
-        dispatch(changeInforFailed())
-        alert("Change User's Information Failed")
-    }
+export const changeinfor = async (new_infor, dispatch) => {
+  dispatch(changeInforStart())
+  try {
+      const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/update/info`, new_infor)
+      console.log(new_user)
+      if (new_user.data.msg === 'error')
+        throw new Error('failed')
+      dispatch(changeInforSuccess(new_user.data.message))
+  } catch (err) {
+      dispatch(changeInforFailed())
+  }
 }
 export const changepass = async (uid, changepass, dispatch, id) => {
     dispatch(changePassStart())
