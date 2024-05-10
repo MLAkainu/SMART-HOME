@@ -253,11 +253,28 @@ const getActivities = async (req, res) => {
 //   }
 // }
 
+const changeInfo = async (req, res) => {
+  try{
+    const receivedToken = req.body.token;
+    if (receivedToken === null) throw new Error("error");
+    const uid = await verifyToken(receivedToken);
+    await updateDoc(doc(db, "User", uid), {
+      lname: req.body.lname,
+      fname: req.body.fname,
+      phoneNo: req.body.phoneNo,
+    });
+    res.status(200).json({msg: "info update"});
+  } catch (error) {
+    console.log("Error update info of user:", error);
+    res.status(400).json({ msg: "error" });
+  }
+}
+
 router.route("/user/new").post(createUser);
 // router.route("/user/login").post(loginUser);
 // router.route('/user/verify').post(verifyUser);
 router.route("/user/").get(getUser).put(updateUser); //.delete(deleteUser);
 router.route("/notifs").post(createNotif).get(getNotifs);
 router.route("/activities").get(getActivities).post(createActivity);
-
+router.route("/user/update/info").put(changeInfo);
 export default router;

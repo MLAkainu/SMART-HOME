@@ -28,15 +28,35 @@ function User({user,auth,firebase}) {
     //     console.log("User", user)
     //     changeavatar(formData, dispatch, user.data.id);
     // };
-    // const handleSubmit2 = async (event) => {
-    //     event.preventDefault();
-    //     const formData = new FormData();
-    //     formData.append("firstname", firstname)
-    //     formData.append("lastname", lastname)
-    //     formData.append("email", email)
-    //     formData.append("phone", phonenumber)
-    //     changeinfor(formData, dispatch, user.data.id)
-    // };
+    const handleSubmit2 = async (event) => {
+      event.preventDefault();
+      const user = auth.currentUser; 
+      const updatedEmail = email;
+
+      try {
+          // Kiểm tra và cập nhật email trong Firebase Auth nếu thay đổi
+          if (user && user.email !== updatedEmail) {
+              await user.updateEmail(updatedEmail);
+              console.log("Email updated successfully in Auth.");
+          }
+          // Cập nhật thông tin người dùng trong Firestore
+          if (user) {
+              const idToken = await auth.currentUser.getIdToken();
+              const newInfo = {
+                firstname: firstname,
+                lastname: lastname,
+                email: updatedEmail, // Cập nhật email mới trong Firestore
+                phone: phonenumber,
+                token:idToken
+              }
+              
+              await changeinfor(newInfo, dispatch);
+              console.log("User information updated successfully in Firestore.");
+          }
+      } catch (error) {
+          console.error("Error updating user information:", error);
+      }
+    };
     // const handleSubmit3 = async (event) => {
     //     event.preventDefault();
     //     let data ={
@@ -123,7 +143,7 @@ function User({user,auth,firebase}) {
         </div>
         <div className="user-field2">
           {/* <form ref={form2Ref} onSubmit={handleSubmit2}> */}
-          <form ref={form2Ref}>
+          <form ref={form2Ref} onSubmit={handleSubmit2}>
             <TextField
               id="firstname"
               label="Firstname"
