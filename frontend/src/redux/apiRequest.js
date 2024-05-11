@@ -155,10 +155,10 @@ export const changeavatar = async (uid, new_avatar, dispatch, id) => {
         alert("Change Avatar failed")
     }
 }
-export const changeinfor = async (new_infor, dispatch) => {
+export const changeinfor = async (user,token,email, dispatch) => {
   dispatch(changeInforStart())
   try {
-      const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/changeinfo`, new_infor)
+      const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user`,{user,token,email})
       if (new_user.data.msg === 'error')
         throw new Error('failed')
       dispatch(changeInforSuccess(new_user.data.message))

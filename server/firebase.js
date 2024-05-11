@@ -115,15 +115,16 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const userRecord = await getAuth().updateUser(req.body.uid, {
+    const receivedToken = req.body.token;
+    console.log("token=", receivedToken);
+    if (receivedToken === null) throw new Error("error");
+    const uid = await verifyToken(receivedToken);
+    getAuth().updateUser(uid, {
       email: req.body.email,
-      password: req.body.password,
     });
-    const user = req.body;
-    delete user.uid;
-    delete user.email;
+    const user = req.body.user;
 
-    await updateDoc(doc(db, "Users", userRecord.uid), user);
+    await updateDoc(doc(db, "Users",uid), user);
     res.status(200).json({ mgs: "user upated" });
   } catch (error) {
     console.log("Error updating user:", error);
