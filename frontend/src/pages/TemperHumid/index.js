@@ -91,7 +91,7 @@ function TemperHumi({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 60000);
+             }, 5000);
             return () => clearInterval(intervalId);
 
     }, []);
