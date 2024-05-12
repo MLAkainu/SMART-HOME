@@ -95,18 +95,9 @@ export const readGas = (req, res) => {
 
 export const writeLight = (req, res) => {
   try{const db = getDatabase();
-  // const uid = req.body.uid;
-  // const val = req.body.val;
-  // const date = req.body.date;
-  // const reference = ref(db,`${uid}/light`);
-  // set(reference, {
-  //   val
-  // })
+  
     const reference = ref(db, "SYS-1");
-    // console.log(req.body.val)
-  // set(reference, {
-  //   LIGHT: req.body.val,
-    // });
+   
     const updates = {};
     updates['SYS-1/LIGHT'] = req.body.val
     update(ref(db),updates)
@@ -144,19 +135,9 @@ export const writeDoor = (req, res) => {
 
 export const writeAlarm = (req, res) => {
   try{const db = getDatabase();
-  // const uid = req.body.uid;
-  // const val = req.body.val;
-  // const date = req.body.date;
-  // const reference = ref(db,`${uid}/light`);
-  // set(reference, {
-  //   val
-  // })
-    
+  
     const reference = ref(db, "SYS-1");
-    // console.log(req.body.val)
-  // set(reference, {
-  //   LIGHT: req.body.val,
-    // });
+   
     const updates = {};
     updates['SYS-1/ALARM'] = req.body.val
     update(ref(db),updates)

@@ -11,7 +11,7 @@ import { FaFan } from "react-icons/fa";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa";
 
-import { updatetemperhumid, putmessage,updateai, getlight, writeLight, writeFan, writeDoor, writeData, updatelux } from '../../redux/apiRequest';
+import { updatetemperhumid, putmessage,updateai, getlight, writeLight, writeFan, writeDoor, writeData, updatelux, writeAlarm, updategas } from '../../redux/apiRequest';
 
 import "./Dashboard.css";
 import 'react-toastify/dist/ReactToastify.css';
@@ -44,6 +44,19 @@ const showToastHumi = () => {
 
 const showToastLight = () => {
     toast.error(' Ánh sáng vượt quá ngưỡng cho phép!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+};
+
+const showToastAlarm = () => {
+    toast.error(' Hệ thống báo động đang thực hiện! ', {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -113,7 +126,7 @@ function Dashboard({token}) {
             message: "",
             type: "1",
         }
-        if (doorBtn === 0) {
+        if (doorBtn === false) {
             message.message = "Mở cửa";
         }
         else {
@@ -147,28 +160,15 @@ function Dashboard({token}) {
     const [tempers, setTemper] = useState(0);
     const [humid, setHumid] = useState(0);
     const [lux, setLux] = useState(0);
+    const [gas, setGas] = useState(false);
+
     console.log("lux", lux)
     console.log("temp", tempers)
     console.log("humid", humid)
 
-    useEffect(() => {
-      const postData = async () => {
-        try {
-         await writeData(token,"humid",humid)
-          await  writeData(token, "temp", tempers)
-           await writeData(token,"lux",lux)
-           
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      postData();
-        const interval = setInterval(() => {
-            postData();
-        },3600000);
+   
 
-      return () => clearInterval(interval);
-    }, []);
+    
 
     
 
@@ -182,9 +182,12 @@ function Dashboard({token}) {
                 let temp = `${year}${month}${day}`;
                 let latest = await updatetemperhumid(token, dispatch, temp);
                 let light = await updatelux(token,dispatch,temp);
+                let gas = await updategas(token,dispatch,temp);
                 setTemper(latest.temp);
                 setHumid(latest.humid);
                 setLux(light);
+                setGas(gas);
+                console.log("GAS",gas)
                 // await errorTemper(latest.temp);
                 // await errorHumi(latest.humid);
 
@@ -204,6 +207,40 @@ function Dashboard({token}) {
             return () => clearInterval(intervalId);
 
     }, [tempers]);
+
+    
+
+
+    
+
+      useEffect(() => {
+        const postData = async () => {
+          try {
+            
+            await writeData(token,"humid",humid)
+            await  writeData(token, "temp", tempers)
+            await writeData(token,"lux",lux)
+             
+             
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        postData();
+        
+
+          const interval = setInterval(() => {
+              postData();
+              
+              
+          },3600000);
+
+  
+        return () => clearInterval(interval);
+      }, []);
+
+
+    
 
 
     async function errorTemper(temper) {
@@ -233,6 +270,7 @@ function Dashboard({token}) {
                 type: "3",
             }
             await putmessage(message, token)
+            console.log("message",message)
         }
     }
 
@@ -245,19 +283,46 @@ function Dashboard({token}) {
         else if ( light< 20 || light > 400 ) {
             showToastLight()
             let message = {
-                content: "Ánh sáng quá ngưỡng",
+                message: "Ánh sáng quá ngưỡng",
                 type: "3"
             }
             await putmessage(message, token)
-            console.log("Check Light", light)
+            console.log("message",message)
+            
         }
     }
 
+    async function errorGas (gas) {
+        console.log("GAS1",gas)
+
+        if (gas == false) {
+            await writeAlarm(false)
+        }
+        else {
+            showToastAlarm()
+            let message = {
+                message: "Hệ thống báo động cháy đang thực hiện!",
+                type: "4"
+            }
+            console.log("message",message)
+            await putmessage(message, token)
+            await writeAlarm(true)
+        }
+    }
     useEffect(() => {
-        errorTemper(tempers);
-        errorHumi(humid);
-        errorLight(lux);
-    },[tempers,humid,lux])
+        const interval = setInterval(() => {
+            errorTemper(tempers);
+            errorHumi(humid);
+            errorLight(lux);
+            errorGas(gas);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [tempers,humid,lux,gas])
+
+
+
+
+    
 
 
     return (

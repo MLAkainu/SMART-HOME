@@ -183,6 +183,8 @@ const getNotifs = async (req, res) => {
     const userRef = collection(db, "Users", uid, "/Notifs");
     const querySnapShot = await getDocs(userRef);
     const acts = []
+
+        
     querySnapShot.forEach((act) => {
       acts.push({
         message: act.data().message,

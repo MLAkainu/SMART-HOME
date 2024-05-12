@@ -52,6 +52,31 @@ export const logout = async (dispatch, navigate) => {
         dispatch(logoutFailed())
     }
 }
+
+export const updategas = async (token, dispatch, date) => {
+    try {
+        let gas = await axios.get(
+          `${process.env.REACT_APP_API_ENDPOINT}/api/data/stat/gas`,
+          {
+            responseType: "json",
+            withCredentials: true,
+            params: {
+              token,
+            },
+          }
+        );
+        return gas.data
+    
+    }
+    catch (err) {
+        return 0
+    }
+}
+
+
+
+
+
 export const updatelux = async (token, dispatch, date) => {
     dispatch(updatelightStart())
     try {
@@ -223,14 +248,29 @@ export const writeDoor = async (val) => {
   }
 };
 
-export const getmessage = async (token) => {
+export const writeAlarm = async (val) => {
+  try {
+    console.log(val);
+    console.log(`${process.env.REACT_APP_API_ENDPOINT}/api/equip/alarm`);
+    await axios.post(
+      `${process.env.REACT_APP_API_ENDPOINT}/api/equip/alarm`,
+      { val }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+export const getmessage = async (token, date) => {
     try {
         const data = await axios.get(
           `${process.env.REACT_APP_API_ENDPOINT}/api/notifs`,
           {
               withCredentials: true,
             params: {
-                token
+                token,
+                date
             },
           }
         );
@@ -240,6 +280,9 @@ export const getmessage = async (token) => {
         console.log(err)
     }
 }
+
+
+
 
 export const getlight = async (token, date) => {
     try {
@@ -319,7 +362,7 @@ export const writeData = async (token, type,val) => {
         withCredentials: true,
       }
     );
-    console.log("humid=", humid.data);
+    console.log("humid=", humid.data,  val);
     return humid.data;
   } catch (err) {
     console.log(err);

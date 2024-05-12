@@ -32,7 +32,8 @@ function Notification({token}) {
             
 
 
-            const message = await getmessage(token, "2024-05-05")
+            const message = await getmessage(token, date)
+            console.log("Message",message)
             for (let i = 0; i < message.length; i++) {
                 message[i].timeStamp = new Date(message[i].timeStamp).toLocaleString()
             }
