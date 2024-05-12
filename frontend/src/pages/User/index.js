@@ -42,24 +42,11 @@ function User({user,auth,firebase,token}) {
                 lname: lastname,
                 phoneNo: phonenumber,
               }
-<<<<<<< HEAD
               //console.log({newInfo});
               await changeinfor(newInfo, dispatch);
 
 
               alert("User information updated successfully.");
-=======
-            //console.log({newInfo});
-            
-            try {
-              await changeinfor(newInfo,token,updatedEmail, dispatch);
-               alert("Đổi thông tin thành công");
-            }
-            catch (err) {
-              alert("Đổi thông tin không thành công!");
-            }
-              
->>>>>>> 1fcb394039f3968988fd489b1afb1400ea2855a1
               console.log("User information updated successfully in Firestore.");
           }
       } catch (error) {
@@ -106,28 +93,16 @@ function User({user,auth,firebase,token}) {
                 .updatePassword(newPassword)
                 .then(() => {
                   // Password update successful
-<<<<<<< HEAD
                   alert("Password updated successfully!");
                   console.log("Password updated successfully!");
                 })
                 .catch((error) => {
                   alert("Error updating password.");
-=======
-                  alert("Đổi mật khẩu thành công")
-                  console.log("Password updated successfully!");
-                })
-                .catch((error) => {
-                  alert("Đổi mật khẩu không thành công!");
->>>>>>> 1fcb394039f3968988fd489b1afb1400ea2855a1
                   console.error("Error updating password:", error);
                 });
             })
             .catch((error) => {
-<<<<<<< HEAD
               alert("Error re-authenticating user.");
-=======
-              alert("Đổi mật khẩu không thành công!");
->>>>>>> 1fcb394039f3968988fd489b1afb1400ea2855a1
               console.error("Error re-authenticating user:", error);
             });;
           // ... rest of your code
