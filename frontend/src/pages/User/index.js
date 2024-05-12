@@ -51,9 +51,13 @@ function User({user,auth,firebase}) {
               }
               //console.log({newInfo});
               await changeinfor(newInfo, dispatch);
+
+
+              alert("User information updated successfully.");
               console.log("User information updated successfully in Firestore.");
           }
       } catch (error) {
+          alert("Error updating user information.");
           console.error("Error updating user information:", error);
       }
     };
@@ -96,13 +100,16 @@ function User({user,auth,firebase}) {
                 .updatePassword(newPassword)
                 .then(() => {
                   // Password update successful
+                  alert("Password updated successfully!");
                   console.log("Password updated successfully!");
                 })
                 .catch((error) => {
+                  alert("Error updating password.");
                   console.error("Error updating password:", error);
                 });
             })
             .catch((error) => {
+              alert("Error re-authenticating user.");
               console.error("Error re-authenticating user:", error);
             });;
           // ... rest of your code

@@ -48,31 +48,7 @@ function TemperHumi({token}) {
     const dispatch = useDispatch();
 
     // Kiểm tra ngưỡng
-    async function errorTemper (temper) {
-        console.log(temper)
-        if (temper < 15 || temper > 50) {
-            showToastTemper()
-            let message = {
-                message: "Nhiệt độ quá ngưỡng",
-                type: "3"
-            }
-            await putmessage(message, token)
-            console.log("Check Temp", temper)
-        }
-    }
     
-    async function errorHumi (humi) {
-        console.log(humi)
-        if (humi < 20 || humi > 80) {
-            showToastHumi()
-            let message = {
-                message: "Độ ẩm quá ngưỡng",
-                type: "3"
-            }
-            await putmessage(message, token)
-            console.log("Check Humi", humi)
-        }
-    }
 
     // let gettempers = useSelector((state) => state.IoT.temperature)
     // let gethumids = useSelector((state) => state.IoT.humidity)
@@ -261,6 +237,42 @@ function TemperHumi({token}) {
 
     console.log("ResultH", humis)
     console.log("ResultT", tempers)
+
+    async function errorTemper (temper) {
+        if (temper == 0) {
+            return;
+        }
+
+
+
+        else if (temper < 15 || temper > 50 ) {
+            showToastTemper()
+            let message = {
+                message: "Nhiệt độ quá ngưỡng",
+                type: "3"
+            }
+            await putmessage(message, token)
+            console.log("Check Temp", temper)
+        }
+    }
+    
+    async function errorHumi (humi) {
+        if (humi == 0) {
+            return;
+        }
+        else if (humi < 20 || humi > 80) {
+            showToastHumi()
+            let message = {
+                message: "Độ ẩm quá ngưỡng",
+                type: "3"
+            }
+            await putmessage(message, token)
+            console.log("Check Humi", humi)
+        }
+    }
+
+
+
 
     // const handlefilter = async () => {
     //     let date = new Date(selectdate)

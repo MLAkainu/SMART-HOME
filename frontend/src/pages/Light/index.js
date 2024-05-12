@@ -73,17 +73,7 @@ function Light({token}) {
 
    
 
-    async function errorLight (light) {
-        if (light< 20 || light > 400) {
-            showToastLight()
-            let message = {
-                content: "Ánh sáng quá ngưỡng",
-                type: "3"
-            }
-            await putmessage(message, token)
-            console.log("Check Light", light)
-        }
-    }
+    
 
     useEffect(() => {
         errorLight(light)
@@ -152,6 +142,22 @@ function Light({token}) {
     }
 
     console.log("light", lights);
+
+    async function errorLight (light) {
+        if (light == 0) {
+            return; 
+        }
+
+        else if (light< 20 || light > 400) {
+            showToastLight()
+            let message = {
+                content: "Ánh sáng quá ngưỡng",
+                type: "3"
+            }
+            await putmessage(message, token)
+            console.log("Check Light", light)
+        }
+    }
 
 
         

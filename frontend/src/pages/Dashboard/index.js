@@ -42,6 +42,19 @@ const showToastHumi = () => {
     });
 };
 
+const showToastLight = () => {
+    toast.error(' Ánh sáng vượt quá ngưỡng cho phép!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+};
+
 function Dashboard({token}) {
 
     const dispatch = useDispatch();
@@ -116,29 +129,7 @@ function Dashboard({token}) {
     // kiểm tra quá ngưỡng
 
 
-    async function errorTemper(temper) {
-        console.log(temper)
-        if (temper < 15 || temper > 50) {
-            showToastTemper();
-            let message = {
-                message: "Nhiệt độ vượt quá ngưỡng cho phép!",
-                type: "3",
-            }
-            await putmessage(message, token)
-        }
-    }
 
-    async function errorHumi(humi) {
-        console.log(humi)
-        if (humi < 20 || humi > 80) {
-            showToastHumi();
-            let message = {
-                message: "Độ ẩm vượt quá ngưỡng cho phép!",
-                type: "3",
-            }
-            await putmessage(message, token)
-        }
-    }
 
     //list image room
 
@@ -156,6 +147,9 @@ function Dashboard({token}) {
     const [tempers, setTemper] = useState(0);
     const [humid, setHumid] = useState(0);
     const [lux, setLux] = useState(0);
+    console.log("lux", lux)
+    console.log("temp", tempers)
+    console.log("humid", humid)
 
     useEffect(() => {
       const postData = async () => {
@@ -176,10 +170,7 @@ function Dashboard({token}) {
       return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        errorTemper(tempers);
-        errorHumi(humid);
-    },[tempers,humid])
+    
 
     useEffect(() => {
         const intervalId = setInterval(async () => {
@@ -215,58 +206,58 @@ function Dashboard({token}) {
     }, [tempers]);
 
 
-    // useEffect(() => {
+    async function errorTemper(temper) {
+        if (temper == 0) {
+            return 
+        }
+        else if (temper < 15 || temper > 50 ) {
+            showToastTemper();
+            let message = {
+                message: "Nhiệt độ vượt quá ngưỡng cho phép!",
+                type: "3",
+            }
+            await putmessage(message, token)
+        }
+    }
 
-    //     var data = { value: 0};
-    //     if (ledBtn) data.value = 1;
+    async function errorHumi(humi) {
+        if (humi == 0) {
+            return 
+        }
 
-    //     fetch( `${process.env.REACT_APP_API_LED}`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}` ,
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     })
-    //     .then(response => console.log(response.status))
-    //     .catch(error => console.error(error));
-    // }, [ledBtn]);
 
-    // useEffect(()=>{
-       
-    //     var data = { value: 0 };  
-    //     if (fanBtn) data.value = 1;
-       
+        else if (humi < 20 || humi > 80 ) {
+            showToastHumi();
+            let message = {
+                message: "Độ ẩm vượt quá ngưỡng cho phép!",
+                type: "3",
+            }
+            await putmessage(message, token)
+        }
+    }
+
+    async function errorLight (light) {
         
-    //     fetch(`${process.env.REACT_APP_API_FAN}`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}`,
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data)
-    //     })
-    //     .then(response => console.log(response.status))
-    //     .catch(error => console.error(error));
-    // },[fanBtn])
+        if (light == 0) {
+            return 
+        }
 
-    // useEffect(()=>{
-       
-    //     var data = { value: 0 };  
-    //     if (doorBtn) data.value = 1;
-       
-        
-    //     fetch( `${process.env.REACT_APP_API_DOOR}`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'X-AIO-Key': `${process.env.REACT_APP_X_AIO_Key}`,
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data)
-    //     })
-    //     .then(response => console.log(response.status))
-    //     .catch(error => console.error(error));
-    // },[doorBtn])
+        else if ( light< 20 || light > 400 ) {
+            showToastLight()
+            let message = {
+                content: "Ánh sáng quá ngưỡng",
+                type: "3"
+            }
+            await putmessage(message, token)
+            console.log("Check Light", light)
+        }
+    }
+
+    useEffect(() => {
+        errorTemper(tempers);
+        errorHumi(humid);
+        errorLight(lux);
+    },[tempers,humid,lux])
 
 
     return (

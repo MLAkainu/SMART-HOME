@@ -38,26 +38,46 @@ function Register({auth}) {
         // }
 
         try {
-            const userCredential = await auth.createUserWithEmailAndPassword(
-          email,
-          password
-        );;
-            const idToken = await auth.currentUser.getIdToken();
-            const newUser = {
-                fname: fname,
-                lname: lname,
-                phoneNo: phoneNo,
-                token:idToken
-            };
-            await auth.signOut();
-            await register(newUser, dispatch, navigate);
-            alert("Đăng ký tài khoản thành công");
-            navigate("/");
+            
+            
+            // phoneNo is no number alert error
+            if (isNaN(phoneNo)) {
+                alert("Phone number is not a number");
+                return;
+            }
+            else {
+                const userCredential = await auth.createUserWithEmailAndPassword(
+                    email,
+                    password
+                  );
+                const idToken = await auth.currentUser.getIdToken();
+                const newUser = {
+                    fname: fname,
+                    lname: lname,
+                    phoneNo: phoneNo,
+                    token:idToken
+                };
+                await auth.signOut();
+                await register(newUser, dispatch, navigate);
+                alert("Đăng ký tài khoản thành công");
+                navigate("/");
+            }
+
+
+           
         }
         catch (err) {
             await auth.signOut();
-            alert("Đăng ký tài khoản thất bại");
             console.log(err)
+
+            
+
+            if (err.code === "auth/email-already-in-use") {
+                alert("Email đã được sử dụng");
+            }
+
+            alert("Đăng ký tài khoản thất bại");
+            
             navigate("/register");
         }
 
