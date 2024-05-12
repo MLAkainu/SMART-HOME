@@ -78,6 +78,21 @@ export const readHumid = (req, res) => {
   }
 }
 
+export const readGas = (req, res) => {
+  try {const db = getDatabase();
+  // const temp = ref(db, `${req.body.uid}/humid`)
+  const temp = ref(db, `SYS-1/GAS`)
+  onValue(temp, (snapshot) => {
+    const data = snapshot.val();
+    console.log(data)
+    res.status(200).json(data).end()
+  },{onlyOnce:true})
+  }
+  catch (err) {
+    res.json({data:'error'})
+  }
+}
+
 export const writeLight = (req, res) => {
   try{const db = getDatabase();
   // const uid = req.body.uid;
@@ -103,6 +118,31 @@ export const writeLight = (req, res) => {
 };
 
 export const writeDoor = (req, res) => {
+  try{const db = getDatabase();
+  // const uid = req.body.uid;
+  // const val = req.body.val;
+  // const date = req.body.date;
+  // const reference = ref(db,`${uid}/light`);
+  // set(reference, {
+  //   val
+  // })
+    
+    const reference = ref(db, "SYS-1");
+    // console.log(req.body.val)
+  // set(reference, {
+  //   LIGHT: req.body.val,
+    // });
+    const updates = {};
+    updates['SYS-1/DOOR'] = req.body.val
+    update(ref(db),updates)
+    res.status(200).json({ message: 'data recorded' })
+  }
+  catch (err) {
+    console.log(err)
+  }
+};
+
+export const writeAlarm = (req, res) => {
   try{const db = getDatabase();
   // const uid = req.body.uid;
   // const val = req.body.val;
@@ -218,6 +258,10 @@ export const readLux = (req, res) => {
 rtrouter.route("/equip/light").get(readLight).post(writeLight)
 rtrouter.route("/equip/door").get(readDoor).post(writeDoor)
 rtrouter.route("/equip/fan").get(readFan).post(writeFan)
+
+rtrouter.route("/equip/alarm").post(writeAlarm)
+
+rtrouter.route("/data/stat/gas").get(readGas) 
 
 rtrouter.route("/data/stat/humid").get(readHumid).post(writeHumid);
 rtrouter.route("/data/stat/temp").get(readTemp).post(writeTemp);
