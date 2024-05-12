@@ -66,7 +66,7 @@ function Light({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 5000);
+             }, 60000);
             return () => clearInterval(intervalId);
 
     }, [light]);

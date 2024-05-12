@@ -203,7 +203,7 @@ function Dashboard({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 5000);
+             }, 60000);
             return () => clearInterval(intervalId);
 
     }, [tempers]);
@@ -310,12 +310,15 @@ function Dashboard({token}) {
         }
     }
     useEffect(() => {
-        const interval = setInterval(() => {
+        const interval = setInterval(
+          () => {
             errorTemper(tempers);
             errorHumi(humid);
             errorLight(lux);
             errorGas(gas);
-        }, 5000);
+          },
+          1800000
+        );
         return () => clearInterval(interval);
     }, [tempers,humid,lux,gas])
 

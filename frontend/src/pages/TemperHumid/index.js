@@ -91,15 +91,20 @@ function TemperHumi({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 5000);
+             }, 60000);
             return () => clearInterval(intervalId);
 
     }, []);
 
-    useEffect(() => {
-        errorTemper(tempers);
-        errorHumi(humid);
-    },[tempers,humid])
+    
+        useEffect(() => {
+          const interval = setInterval(() => {
+            errorTemper(tempers);
+            errorHumi(humid);
+          }, 1800000);
+          return () => clearInterval(interval);
+        }, [tempers, humid]);
+
 
 
     // useEffect(() => {
