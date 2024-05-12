@@ -17,7 +17,7 @@ import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
 import firebase from "firebase/compat/app";
-import  "firebase/compat/auth";
+import "firebase/compat/auth";
 
 const API_KEY = "AIzaSyDkg6T_z2SyvQxU2BIv1bJcfddlhEGqNR4";
 const AUTH_DOMAIN = "smart-home-1dabb.firebaseapp.com";
@@ -44,18 +44,18 @@ function App() {
   const [user, setUser] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [userinfo, setUserinfo] = useState(null);
-  const [token,setToken]=useState(null)
-  let data
+  const [token, setToken] = useState(null);
+  let data;
 
-  const changeinfo=useCallback((data)=>setUserinfo(data),[])
- useEffect(() => {
-    auth.onAuthStateChanged( async (user) => {
+  const changeinfo = useCallback((data) => setUserinfo(data), []);
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
         // User is signed in
         const uid = user.uid;
         const fetchUserInfo = async () => {
           const idToken = await auth.currentUser.getIdToken();
-          setToken(idToken)
+          setToken(idToken);
           const res = await axios.get(
             `${process.env.REACT_APP_API_ENDPOINT}/api/user/`,
             {
@@ -65,11 +65,11 @@ function App() {
             }
           );
           // console.log(res.data)
-          data = res.data
+          data = res.data;
         };
-       await  fetchUserInfo();
-        console.log(data)
-setUserinfo(data);
+        await fetchUserInfo();
+        console.log(data);
+        setUserinfo(data);
         setIsAuth(true);
       } else {
         // User is signed out
@@ -78,11 +78,11 @@ setUserinfo(data);
         signOut();
         setUser(null);
         setToken(null);
-        setUserinfo(null)
+        setUserinfo(null);
       }
     });
   }, []);
-  
+
   // auth.signOut();
   // setIsAuth(false)
   return isAuth ? (
@@ -92,8 +92,21 @@ setUserinfo(data);
           <Route path="/dashboard" element={<Dashboard token={token} />} />
           <Route path="/light" element={<Light token={token} />} />
           <Route path="/temperhumi" element={<TemperHumi token={token} />} />
-          <Route path="/notification" element={<Notification token={token} />} />
-          <Route path="/user" element={<User user={userinfo} auth={auth} firebase={firebase} />} />
+          <Route
+            path="/notification"
+            element={<Notification token={token} />}
+          />
+          <Route
+            path="/user"
+            element={
+              <User
+                user={userinfo}
+                auth={auth}
+                firebase={firebase}
+                token={token}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>

@@ -5,8 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from "react-redux"
 import { TextField, Button, Avatar, Input } from '@mui/material';
 import { changeavatar, changeinfor, changepass } from '../../redux/apiRequest';
-
-function User({user,auth,firebase}) {
+function User({user,auth,firebase,token}) {
     
     const [firstname, setFirstname] = useState(user.fname);
     const [lastname, setLastname] = useState(user.lname);
@@ -35,25 +34,32 @@ function User({user,auth,firebase}) {
 
       try {
           // Kiểm tra và cập nhật email trong Firebase Auth nếu thay đổi
-          if (user && user.email !== updatedEmail) {
-              await user.updateEmail(updatedEmail);
-              console.log("Email updated successfully in Auth.");
-          }
           // Cập nhật thông tin người dùng trong Firestore
           if (user) {
               const idToken = await auth.currentUser.getIdToken();
               const newInfo = {
-                firstname: firstname,
-                lastname: lastname,
-                email: updatedEmail, 
-                phone: phonenumber,
-                token:idToken,
+                fname: firstname,
+                lname: lastname,
+                phoneNo: phonenumber,
               }
+<<<<<<< HEAD
               //console.log({newInfo});
               await changeinfor(newInfo, dispatch);
 
 
               alert("User information updated successfully.");
+=======
+            //console.log({newInfo});
+            
+            try {
+              await changeinfor(newInfo,token,updatedEmail, dispatch);
+               alert("Đổi thông tin thành công");
+            }
+            catch (err) {
+              alert("Đổi thông tin không thành công!");
+            }
+              
+>>>>>>> 1fcb394039f3968988fd489b1afb1400ea2855a1
               console.log("User information updated successfully in Firestore.");
           }
       } catch (error) {
@@ -100,16 +106,28 @@ function User({user,auth,firebase}) {
                 .updatePassword(newPassword)
                 .then(() => {
                   // Password update successful
+<<<<<<< HEAD
                   alert("Password updated successfully!");
                   console.log("Password updated successfully!");
                 })
                 .catch((error) => {
                   alert("Error updating password.");
+=======
+                  alert("Đổi mật khẩu thành công")
+                  console.log("Password updated successfully!");
+                })
+                .catch((error) => {
+                  alert("Đổi mật khẩu không thành công!");
+>>>>>>> 1fcb394039f3968988fd489b1afb1400ea2855a1
                   console.error("Error updating password:", error);
                 });
             })
             .catch((error) => {
+<<<<<<< HEAD
               alert("Error re-authenticating user.");
+=======
+              alert("Đổi mật khẩu không thành công!");
+>>>>>>> 1fcb394039f3968988fd489b1afb1400ea2855a1
               console.error("Error re-authenticating user:", error);
             });;
           // ... rest of your code
@@ -149,7 +167,6 @@ function User({user,auth,firebase}) {
           </form>
         </div>
         <div className="user-field2">
-          {/* <form ref={form2Ref} onSubmit={handleSubmit2}> */}
           <form ref={form2Ref} onSubmit={handleSubmit2}>
             <TextField
               id="firstname"
