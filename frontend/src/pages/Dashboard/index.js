@@ -10,6 +10,7 @@ import lux1 from "../../assets/lux.jpg";
 import { FaFan } from "react-icons/fa";
 import { FaRegLightbulb } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa";
+import { GiWhistle } from "react-icons/gi";
 
 import { updatetemperhumid, putmessage,updateai, getlight, writeLight, writeFan, writeDoor, writeData, updatelux, writeAlarm, updategas } from '../../redux/apiRequest';
 
@@ -118,6 +119,23 @@ function Dashboard({token}) {
         await putmessage(message, token)
     }
 
+    const [AlarmBtn, setAlarm] = useState(false);
+    const clickAlarm = async () => {
+        let message = {
+            message: "",
+            type: "1",
+        }
+        if (fanBtn == false) {
+            message.message = "Bật còi báo động";
+        }
+        else {
+            message.message = "Tắt còi báo động";
+        }
+        setAlarm(!AlarmBtn);
+        await writeAlarm(!AlarmBtn);
+        await putmessage(message, token)
+    }
+
 
     //coong tắc cửa
     const [doorBtn, setDoor] = useState(false);
@@ -203,7 +221,7 @@ function Dashboard({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 60000);
+             }, 10000);
             return () => clearInterval(intervalId);
 
     }, [tempers]);
@@ -384,29 +402,7 @@ function Dashboard({token}) {
                             </label>
                         </button>
 
-                        <button className="btn-fan btn" style={{ backgroundColor: fanBtn && '#1babfc' }} >
-                            <span className='span1'></span>
-                            <span className='span2'></span>
-                            <span className='span3'></span>
-                            <span className='span4'></span>
-                            <div className="fan-border">
-                                <i className="fan-btn-icon"><FaFan /></i>
-                                
-                            </div>
-                            <div className="fan-text">
-                                <span className="fan-infor">FAN</span>
-                                <span className="fan-connect"> {!fanBtn ? "Not Connected" : "Connected"}</span>
-                            </div>
-                            <label class="switch">
-                                <input className="btn-switch" type="checkbox" onClick={clickFan} />
-                                <span class="slider">
-                                    <ul className="switch__select">
-                                        <li className="switch__select-item">Off</li>
-                                        <li className="switch__select-item">On</li>
-                                    </ul>
-                                </span>
-                            </label>
-                        </button>
+                        
 
                         <button className="btn-door btn" style={{ backgroundColor: doorBtn && '#1babfc' }} >
                             <span className='span1'></span>
@@ -422,6 +418,31 @@ function Dashboard({token}) {
                             </div>
                             <label class="switch">
                                 <input className="btn-switch" type="checkbox" onClick={clickDoor} checked={doorBtn} />
+                                <span class="slider">
+                                    <ul className="switch__select">
+                                        <li className="switch__select-item">Off</li>
+                                        <li className="switch__select-item">On</li>
+                                    </ul>
+                                </span>
+                            </label>
+                        </button>
+
+
+                        <button className="btn-fan btn" style={{ backgroundColor: fanBtn && '#1babfc' }} >
+                            <span className='span1'></span>
+                            <span className='span2'></span>
+                            <span className='span3'></span>
+                            <span className='span4'></span>
+                            <div className="fan-border">
+                                <i className="fan-btn-icon"><GiWhistle /></i>
+                                
+                            </div>
+                            <div className="fan-text">
+                                <span className="fan-infor">ALARM</span>
+                                <span className="fan-connect"> {!AlarmBtn ? "Not Connected" : "Connected"}</span>
+                            </div>
+                            <label class="switch">
+                                <input className="btn-switch" type="checkbox" onClick={clickAlarm} />
                                 <span class="slider">
                                     <ul className="switch__select">
                                         <li className="switch__select-item">Off</li>
