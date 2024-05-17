@@ -101,7 +101,7 @@ function TemperHumi({token}) {
           const interval = setInterval(() => {
             errorTemper(tempers);
             errorHumi(humid);
-          }, 1800000);
+          });
           return () => clearInterval(interval);
         }, [tempers, humid]);
 
@@ -223,21 +223,12 @@ function TemperHumi({token}) {
             else {
                 temp_.push(te[i].toString() )
             }
-            
-            
-
         }
         setHumis(temp)
         setTempers(temp_)
 
         console.log("Result1", selectdate)
         console.log("Result2", temp)
-        
-
-
-
-
-
     }
 
     console.log("ResultH", humis)
@@ -247,9 +238,6 @@ function TemperHumi({token}) {
         if (temper == 0) {
             return;
         }
-
-
-
         else if (temper < 15 || temper > 50 ) {
             showToastTemper()
             let message = {

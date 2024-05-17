@@ -334,8 +334,7 @@ function Dashboard({token}) {
             errorHumi(humid);
             errorLight(lux);
             errorGas(gas);
-          },
-          1800000
+          }
         );
         return () => clearInterval(interval);
     }, [tempers,humid,lux,gas])

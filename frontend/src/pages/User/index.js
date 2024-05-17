@@ -46,11 +46,11 @@ function User({user,auth,firebase,token}) {
               await changeinfor(newInfo, dispatch);
 
 
-              alert("User information updated successfully.");
+              alert("Thông tin người dùng đã được cập nhật thành công.");
               console.log("User information updated successfully in Firestore.");
           }
       } catch (error) {
-          alert("Error updating user information.");
+          alert("Có lỗi xảy ra khi cập nhật thông tin người dùng.");
           console.error("Error updating user information:", error);
       }
     };
@@ -93,16 +93,16 @@ function User({user,auth,firebase,token}) {
                 .updatePassword(newPassword)
                 .then(() => {
                   // Password update successful
-                  alert("Password updated successfully!");
+                  alert("Mật khẩu đã được cập nhật thành công.");
                   console.log("Password updated successfully!");
                 })
                 .catch((error) => {
-                  alert("Error updating password.");
+                  alert("Có lỗi xảy ra khi cập nhật mật khẩu.");
                   console.error("Error updating password:", error);
                 });
             })
             .catch((error) => {
-              alert("Error re-authenticating user.");
+              alert("Có lỗi xảy ra khi xác thực lại người dùng.");
               console.error("Error re-authenticating user:", error);
             });;
           // ... rest of your code
