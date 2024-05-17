@@ -66,7 +66,7 @@ function Light({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 5000);
+             }, 3000);
             return () => clearInterval(intervalId);
 
     }, [light]);
@@ -75,9 +75,7 @@ function Light({token}) {
 
     
 
-    useEffect(() => {
-        errorLight(light)
-    },[light])
+    
 
     // useEffect(() => {
     //     const intervalId = setInterval(async () => {
@@ -144,20 +142,26 @@ function Light({token}) {
     console.log("light", lights);
 
     async function errorLight (light) {
-        if (light == 0) {
+        if (light === 0) {
             return; 
         }
 
-        else if (light< 20 || light > 400) {
+        else if (light < 20 || light > 400) {
             showToastLight()
             let message = {
-                content: "Ánh sáng quá ngưỡng",
+                message: "Ánh sáng quá ngưỡng",
                 type: "3"
             }
             await putmessage(message, token)
+
             console.log("Check Light", light)
         }
     }
+
+    useEffect(() => {
+        errorLight(light)
+
+    })
 
 
         
