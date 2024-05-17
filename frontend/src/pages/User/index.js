@@ -37,22 +37,24 @@ function User({user,auth,firebase,token}) {
       try {
           // Kiểm tra và cập nhật email trong Firebase Auth nếu thay đổi
           // Cập nhật thông tin người dùng trong Firestore
+          if (user && user.email !== updatedEmail) {
+            await user.updateEmail(updatedEmail);
+            console.log("Email updated successfully in Auth.");
+        }
+
+
           if (user) {
               const idToken = await auth.currentUser.getIdToken();
               const newInfo = {
-                fname: firstname,
-                lname: lastname,
-                phoneNo: phonenumber,
+                firstname: firstname,
+                lastname: lastname,
+                email: updatedEmail,
+                phone: phonenumber,
+                token: idToken,
               }
               //console.log({newInfo});
               
-              try {
-                await changeinfor(newInfo,token,updatedEmail, dispatch);
-                 alert("Đổi thông tin thành công");
-              }
-              catch (err) {
-                alert("Đổi thông tin không thành công!");
-              }
+                await changeinfor(newInfo, dispatch);
                 
                 console.log("User information updated successfully in Firestore.");
             }

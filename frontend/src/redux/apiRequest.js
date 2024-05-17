@@ -184,7 +184,7 @@ export const changeinfor = async (new_infor, dispatch) => {
   dispatch(changeInforStart())
   try {
       
-      console.log(new_user)
+      console.log("AAA",new_user)
       const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/changeinfo`, new_infor)
       if (new_user.data.msg === 'error')
         throw new Error('failed')
