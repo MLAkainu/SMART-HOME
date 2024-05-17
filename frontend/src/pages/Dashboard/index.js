@@ -298,7 +298,7 @@ function Dashboard({token}) {
             return 
         }
 
-        else if ( light< 20 || light > 400 ) {
+        else if ( light< 10 || light > 400 ) {
             showToastLight()
             let message = {
                 message: "Ánh sáng quá ngưỡng",
@@ -334,7 +334,7 @@ function Dashboard({token}) {
             errorHumi(humid);
             errorLight(lux);
             errorGas(gas);
-          }
+          }, 10000
         );
         return () => clearInterval(interval);
     }, [tempers,humid,lux,gas])

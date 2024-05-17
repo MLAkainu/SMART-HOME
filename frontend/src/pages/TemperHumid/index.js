@@ -101,7 +101,7 @@ function TemperHumi({token}) {
           const interval = setInterval(() => {
             errorTemper(tempers);
             errorHumi(humid);
-          });
+          }, 5000);
           return () => clearInterval(interval);
         }, [tempers, humid]);
 

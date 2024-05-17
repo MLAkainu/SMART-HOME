@@ -146,7 +146,7 @@ function Light({token}) {
             return; 
         }
 
-        else if (light < 20 || light > 400) {
+        else if (light < 10 || light > 400) {
             showToastLight()
             let message = {
                 message: "Ánh sáng quá ngưỡng",
@@ -159,9 +159,17 @@ function Light({token}) {
     }
 
     useEffect(() => {
-        errorLight(light)
+        const intervalId = setInterval(async () => {
+            () => {
+                console.log("Check Light")
+                errorLight(light)
+            }, 5000
 
-    })
+        });
+        return () => clearInterval(intervalId);
+
+    }
+     )
 
 
         
