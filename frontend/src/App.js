@@ -104,6 +104,7 @@ function App() {
                 auth={auth}
                 firebase={firebase}
                 token={token}
+                setUser={setUserinfo}
               />
             }
           />
