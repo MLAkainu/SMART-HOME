@@ -91,7 +91,7 @@ function TemperHumi({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 5000);
+             }, 10000);
             return () => clearInterval(intervalId);
 
     }, []);
@@ -101,7 +101,7 @@ function TemperHumi({token}) {
           const interval = setInterval(() => {
             errorTemper(tempers);
             errorHumi(humid);
-          }, 5000);
+          }, 10000);
           return () => clearInterval(interval);
         }, [tempers, humid]);
 

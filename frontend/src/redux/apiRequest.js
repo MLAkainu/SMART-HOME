@@ -180,10 +180,12 @@ export const changeavatar = async (uid, new_avatar, dispatch, id) => {
         alert("Change Avatar failed")
     }
 }
-export const changeinfor = async (user,token,email, dispatch) => {
+export const changeinfor = async (new_infor, dispatch) => {
   dispatch(changeInforStart())
   try {
-      const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user`,{user,token,email})
+      
+      console.log(new_user)
+      const new_user = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/api/user/changeinfo`, new_infor)
       if (new_user.data.msg === 'error')
         throw new Error('failed')
       dispatch(changeInforSuccess(new_user.data.message))
@@ -191,6 +193,8 @@ export const changeinfor = async (user,token,email, dispatch) => {
       dispatch(changeInforFailed())
   }
 }
+
+
 export const changepass = async (uid, changepass, dispatch, id) => {
     dispatch(changePassStart())
     try {

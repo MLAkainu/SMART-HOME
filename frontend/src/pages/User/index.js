@@ -29,8 +29,10 @@ function User({user,auth,firebase,token}) {
     // };
     const handleSubmit2 = async (event) => {
       event.preventDefault();
+
       const user = auth.currentUser; 
       const updatedEmail = email;
+      
 
       try {
           // Kiểm tra và cập nhật email trong Firebase Auth nếu thay đổi
@@ -43,17 +45,21 @@ function User({user,auth,firebase,token}) {
                 phoneNo: phonenumber,
               }
               //console.log({newInfo});
-              await changeinfor(newInfo, dispatch);
-
-
-              alert("Thông tin người dùng đã được cập nhật thành công.");
-              console.log("User information updated successfully in Firestore.");
-          }
-      } catch (error) {
-          alert("Có lỗi xảy ra khi cập nhật thông tin người dùng.");
-          console.error("Error updating user information:", error);
-      }
-    };
+              
+              try {
+                await changeinfor(newInfo,token,updatedEmail, dispatch);
+                 alert("Đổi thông tin thành công");
+              }
+              catch (err) {
+                alert("Đổi thông tin không thành công!");
+              }
+                
+                console.log("User information updated successfully in Firestore.");
+            }
+        } catch (error) {
+            console.error("Error updating user information:", error);
+        }
+      };
     // const handleSubmit3 = async (event) => {
     //     event.preventDefault();
     //     let data ={

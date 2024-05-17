@@ -66,7 +66,7 @@ function Light({token}) {
             catch (err) {
                 console.error("Fail", err)
             }
-             }, 3000);
+             }, 10000);
             return () => clearInterval(intervalId);
 
     }, [light]);
@@ -158,18 +158,14 @@ function Light({token}) {
         }
     }
 
-    useEffect(() => {
-        const intervalId = setInterval(async () => {
-            () => {
-                console.log("Check Light")
-                errorLight(light)
-            }, 5000
+    
 
-        });
-        return () => clearInterval(intervalId);
-
-    }
-     )
+     useEffect(() => {
+        const interval = setInterval(() => {
+          errorLight(light)
+        }, 10000);
+        return () => clearInterval(interval);
+      }, [light]);
 
 
         
