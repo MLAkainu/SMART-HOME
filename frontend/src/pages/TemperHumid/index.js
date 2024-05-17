@@ -292,7 +292,7 @@ function TemperHumi({token}) {
                     |
                 </div>
                 <div className='temperHumi__left-chart'>
-                    <TemperatureChart data1={humis} data2={tempers} />
+                    <TemperatureChart data1={tempers} data2={humis} />
                 </div>
 
             </div>

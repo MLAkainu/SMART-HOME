@@ -287,6 +287,7 @@ const changeInfo = async (req, res) => {
       phoneNo: req.body.phone,
     }
     await updateDoc(doc(db, "Users", uid), data);
+    
     res.status(200).json({msg: "info update"});
   } catch (error) {
     console.log("Error update info of user:", error);
